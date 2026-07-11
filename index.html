@@ -59,9 +59,10 @@ main{max-width:640px; margin:0 auto; padding:12px}
   border:1px solid var(--gold); border-radius:10px; padding:0 7px}
 .rt{flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:5px; min-width:46px}
 .area{font-size:.6rem; line-height:1.2; text-align:center; padding:2px 5px; border-radius:8px;
-  background:var(--chip); color:var(--sub); max-width:54px}
-a.area.food{color:var(--acc2); border:1px solid var(--acc2); background:transparent;
-  text-decoration:none; cursor:pointer; font-weight:700}
+  background:var(--chip); color:var(--sub); max-width:54px; white-space:nowrap}
+.foodlink{font-size:.6rem; line-height:1.2; text-align:center; padding:2px 6px; border-radius:8px;
+  color:var(--acc2); border:1px solid var(--acc2); background:transparent;
+  text-decoration:none; cursor:pointer; font-weight:700; white-space:nowrap}
 .ck{flex:0 0 auto; width:24px; height:24px; border:2px solid var(--line); border-radius:50%;
   margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:transparent}
 .ev.done .ck{background:var(--acc); border-color:var(--acc); color:#fff}
@@ -706,7 +707,9 @@ var AREA_LABEL={home:'🏠台中',transit:'🚄移動',sapporo:'🏙️札幌',o
 var FOOD_AREA={sapporo:1,otaru:1,noboribetsu:1};
 function areaOf(dayId,idx){ var bp=DAY_AREA[dayId]; if(!bp) return ''; var a=''; for(var k=0;k<bp.length;k++){ if(idx>=bp[k][0]) a=bp[k][1]; } return a; }
 function areaChip(ar){ var L=AREA_LABEL[ar]; if(!L) return '';
-  return FOOD_AREA[ar] ? '<a class="area food" onclick="event.stopPropagation();jumpFood(\''+ar+'\')">'+L+' 🍜</a>' : '<span class="area">'+L+'</span>'; }
+  var h='<span class="area">'+L+'</span>';
+  if(FOOD_AREA[ar]) h+='<a class="foodlink" onclick="event.stopPropagation();jumpFood(\''+ar+'\')">🍜 美食</a>';
+  return h; }
 
 function renderDay(day){
   var h='<div class="dayhead"><div class="d">'+day.d+'</div><div class="s">'+day.s+'</div></div>';
