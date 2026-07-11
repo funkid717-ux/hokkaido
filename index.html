@@ -497,7 +497,7 @@ function svgMap(pts){
   return s;
 }
 var MAPS = [
- { title:'🚉 札幌車站周邊', note:'D1晚上／D2・D4夜間 共用動線', pts:[
+ { id:'spr', title:'🚉 札幌車站周邊', note:'D1晚上／D2・D4夜間 共用動線', pts:[
    {label:'札幌駅・飯店', label2:'南口步行約5分'},
    {label:'チカホ地下街', label2:'地下步行空間', via:'🚶 步行約3分'},
    {label:'大通公園', via:'🚶 步行約15分'},
@@ -505,7 +505,7 @@ var MAPS = [
    {label:'すすきの', label2:'薄野・成吉思汗烤肉', via:'🚶 步行約5分'},
    {label:'藻岩山山頂', label2:'夜景展望台', via:'🚋+🚡 約35分'}
  ]},
- { title:'🚃 小樽一日路線', note:'D2 全日動線(JR快速エアポート往返)', pts:[
+ { id:'otr', title:'🚃 小樽一日路線', note:'D2 全日動線(JR快速エアポート往返)', pts:[
    {label:'小樽駅'},
    {label:'小樽運河', label2:'經舊手宮線遺跡', via:'🚶 步行約10分'},
    {label:'三角市場', label2:'海鮮丼午餐', via:'🚶 步行約10分'},
@@ -513,7 +513,7 @@ var MAPS = [
    {label:'天狗山', label2:'纜車夕景夜景', via:'🚌 步行+巴士約20分'},
    {label:'JR回札幌', via:'🚌+🚆 約60分'}
  ]},
- { title:'♨️ 登別溫泉散步', note:'D3 上午(巴士總站寄物,輕裝來回)', pts:[
+ { id:'nbr', title:'♨️ 登別溫泉散步', note:'D3 上午(巴士總站寄物,輕裝來回)', pts:[
    {label:'巴士總站', label2:'寄物置物櫃'},
    {label:'地獄谷入口', via:'🚶 上坡約10分'},
    {label:'鉄泉池', label2:'谷底棧道', via:'🚶 棧道約15分'},
@@ -521,7 +521,7 @@ var MAPS = [
    {label:'天然足湯', label2:'大湯沼川', via:'🚶 步行約10分'},
    {label:'溫泉街午餐→巴士回駅', via:'🚶 步行約15分'}
  ]},
- { title:'🌋 洞爺湖溫泉街', note:'D3夜～D4上午(以萬世閣為據點)', pts:[
+ { id:'tya', title:'🌋 洞爺湖溫泉街', note:'D3夜～D4上午(以萬世閣為據點)', pts:[
    {label:'巴士站→萬世閣', label2:'中央通'},
    {label:'湖畔散步・足湯', via:'🚶 步行約5分'},
    {label:'頂樓溫泉・晚餐', via:'🚶 步行約10分'},
@@ -557,22 +557,56 @@ function svgOverview(){
     s+=pill(a.x+(b.x-a.x)*t, a.y+(b.y-a.y)*t, e.label);
   });
   OV.nodes.forEach(function(n){
+    var click = AREA_MAP[n.id];
+    s+= click ? '<g style="cursor:pointer" onclick="jumpArea(\''+n.id+'\')">' : '<g>';
+    if(click) s+='<circle cx="'+n.x+'" cy="'+n.y+'" r="22" fill="transparent"/>'; // 加大點擊範圍
     s+='<circle cx="'+n.x+'" cy="'+n.y+'" r="13" fill="var(--card)" stroke="var(--acc)" stroke-width="2.5"/>';
+    if(click) s+='<circle cx="'+(n.x+11)+'" cy="'+(n.y-11)+'" r="5.5" fill="var(--acc)"/><text x="'+(n.x+11)+'" y="'+(n.y-8)+'" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">›</text>';
     s+='<text x="'+n.x+'" y="'+(n.y+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--acc)">'+n.label.slice(0,1)+'</text>';
     s+='<text x="'+n.x+'" y="'+(n.y+27)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">'+n.label+'</text>';
     s+='<text x="'+n.x+'" y="'+(n.y+40)+'" text-anchor="middle" font-size="9.5" fill="var(--sub)">'+n.label2+'</text>';
+    s+='</g>';
   });
   s+='</svg>';
   return s;
 }
+var AREA_MAP={spr:1,otr:1,nbr:1,tya:1};
 
 function renderMaps(){
   var h='<div class="dayhead"><div class="d">🗺️ 地圖(離線示意圖)</div><div class="s">依行程走訪順序繪製,非精確地理比例尺</div></div>';
   h+='<div class="card"><p>此頁完全離線可用。圖上號碼＝當天走訪順序,橘色小標籤＝與上一站的交通方式和所需時間,皆非實際方位或距離。想要精確定位與導航,可點各事件卡片「📍 地點」後方的「↗地圖」(需有網路/eSIM 才能開啟)。</p></div>';
-  h+='<div class="card"><h3>🗾 北海道整體位置示意</h3><span class="maptag">5 個落腳點的相對地理位置與區間交通</span>'+svgOverview()+'</div>';
+  h+='<div class="card" id="overview-map"><h3>🗾 北海道整體位置示意</h3><span class="maptag">👆 點地圖上有「›」的地點,跳到該區路線圖</span>'+svgOverview()+'</div>';
   MAPS.forEach(function(m){
-    h+='<div class="card"><h3>'+m.title+'</h3><span class="maptag">'+m.note+'</span>'+svgMap(m.pts)+'</div>';
+    h+='<div class="card" id="areamap-'+(m.id||'')+'"><h3>'+m.title+'</h3><span class="maptag">'+m.note+'</span>'+svgMap(m.pts)+'</div>';
   });
+  return h;
+}
+
+function renderOverview(){
+  var h='<div class="dayhead"><div class="d">🗾 行程總覽</div><div class="s">2026/8/26(三)–8/30(日)・5天4夜・兩人・台中出發</div></div>';
+  h+='<div class="card"><h3>去哪些地方</h3><span class="maptag">👆 點地圖上有「›」的地點,跳到該區路線圖</span>'+svgOverview()+'</div>';
+  h+='<div class="sec">🏨 落腳與住宿</div>';
+  h+='<div class="card">'+
+    '<p>🏙️ <b>札幌</b>(大本營・住 3 晚)ソラリア西鉄ホテル<br><span style="color:var(--sub);font-size:.8rem">8/26・8/27・8/29 同一家;小樽/登別/洞爺都由此出發</span></p>'+
+    '<p>🌊 <b>小樽</b> — 8/27 一日來回(不過夜)</p>'+
+    '<p>♨️ <b>登別溫泉</b> — 8/28 上午地獄谷(不過夜)</p>'+
+    '<p>🌋 <b>洞爺湖</b>(住 1 晚)萬世閣一泊二食<br><span style="color:var(--sub);font-size:.8rem">8/28 入住,自助晚餐+湖畔花火</span></p>'+
+    '</div>';
+  h+='<div class="sec">📅 每日行程(點卡片看細節)</div>';
+  var TL=[
+   ['D1 8/26(三)','台中 ✈ 新千歲 → 札幌;傍晚狸小路成吉思汗、藻岩山夜景','d1'],
+   ['D2 8/27(四)','小樽一日遊:運河・堺町通・天狗山夕景','d2'],
+   ['D3 8/28(五)','札幌 → 登別地獄谷 → 洞爺湖萬世閣(一泊二食・花火)','d3'],
+   ['D4 8/29(六)','洞爺湖遊覽 → 回札幌購物+螃蟹晚餐','d4'],
+   ['D5 8/30(日)','新千歲機場採買 ✈ 桃園 → 台中到家','d5']
+  ];
+  TL.forEach(function(t){
+    h+='<div class="card" style="cursor:pointer" onclick="show(\''+t[2]+'\')"><h3>'+t[0]+' ›</h3><p>'+t[1]+'</p></div>';
+  });
+  h+='<div class="sec">✈️ 航班(星宇 StarLux)</div>';
+  h+='<div class="card"><p>去程 <b>JX850</b>|8/26 TPE 桃園 10:05 → CTS 新千歲 15:10</p>'+
+     '<p>回程 <b>JX851</b>|8/30 CTS 新千歲 16:25 → TPE 桃園 19:35</p>'+
+     '<p class="note">A330-900neo。美食/住宿/交通等細節見上方分頁。</p></div>';
   return h;
 }
 
@@ -622,7 +656,8 @@ var doneEv = store.get('ev'), donePk = store.get('pk');
 
 var nav = document.getElementById('nav');
 var main = document.getElementById('main');
-var TABS = DAYS.map(function(d){return {id:d.id, label:d.tab}})
+var TABS = [{id:'overview',label:'🗾 總覽'}]
+  .concat(DAYS.map(function(d){return {id:d.id, label:d.tab}}))
   .concat([{id:'food',label:'🍜 美食'},{id:'stay',label:'🏨 住宿'},{id:'move',label:'🚌 交通'},
            {id:'maps',label:'🗺️ 地圖'},{id:'budget',label:'💰 預算'},{id:'info',label:'ℹ️ 資訊'}]);
 
@@ -843,6 +878,7 @@ function show(id){
   var day=null;
   for(var i=0;i<DAYS.length;i++) if(DAYS[i].id===id) day=DAYS[i];
   if(day) main.innerHTML=renderDay(day);
+  else if(id==='overview') main.innerHTML=renderOverview();
   else if(id==='food') main.innerHTML=renderFood();
   else if(id==='stay') main.innerHTML=renderStay();
   else if(id==='move') main.innerHTML=renderMove();
@@ -863,6 +899,15 @@ window.toggleDone=function(key){
 window.togglePk=function(el,key){
   donePk[key]=!donePk[key]; store.set('pk',donePk);
   el.classList.toggle('done',!!donePk[key]);
+};
+
+/* 點總覽/地圖上的地點 → 切到地圖頁並捲動到該區路線圖 */
+window.jumpArea=function(id){
+  if(!AREA_MAP[id]) return;
+  var go=function(){ var el=document.getElementById('areamap-'+id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
+  var onMaps=false;
+  Array.prototype.forEach.call(nav.children,function(b){ if(b.dataset.id==='maps'&&b.classList.contains('on')) onMaps=true; });
+  if(onMaps){ go(); } else { show('maps'); setTimeout(go,80); }
 };
 
 /* 「現在該做什麼」:日期符合時高亮當前事件 */
@@ -899,7 +944,7 @@ function tickNow(){
   var today=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   var open=null;
   DAYS.forEach(function(x){ if(x.date===today) open=x.id; });
-  if(!open){ var last=store.get('tab'); open=(last&&last.id)?last.id:'prep'; }
+  if(!open){ var last=store.get('tab'); open=(last&&last.id)?last.id:'overview'; }
   show(open);
 })();
 
