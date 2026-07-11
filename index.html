@@ -57,6 +57,11 @@ main{max-width:640px; margin:0 auto; padding:12px}
 .lo .gm:active{background:var(--acc); color:#fff}
 .cost{display:inline-block; margin-top:4px; font-size:.72rem; color:var(--gold);
   border:1px solid var(--gold); border-radius:10px; padding:0 7px}
+.rt{flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:5px; min-width:46px}
+.area{font-size:.6rem; line-height:1.2; text-align:center; padding:2px 5px; border-radius:8px;
+  background:var(--chip); color:var(--sub); max-width:54px}
+a.area.food{color:var(--acc2); border:1px solid var(--acc2); background:transparent;
+  text-decoration:none; cursor:pointer; font-weight:700}
 .ck{flex:0 0 auto; width:24px; height:24px; border:2px solid var(--line); border-radius:50%;
   margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:transparent}
 .ev.done .ck{background:var(--acc); border-color:var(--acc); color:#fff}
@@ -490,6 +495,7 @@ function svgMap(pts){
     if(i>0 && p.via) s+=pill(x, TOP+(i-1)*GAP+GAP*0.62, p.via);
     s+='<circle cx="'+x+'" cy="'+y+'" r="11" fill="var(--card)" stroke="var(--acc)" stroke-width="2.5"/>';
     s+='<text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--acc)">'+(i+1)+'</text>';
+    if(p.t) s+='<text x="'+(x+22)+'" y="'+(y+4)+'" text-anchor="start" font-size="9.5" font-weight="700" fill="var(--acc2)">'+p.t+'</text>';
     s+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle" font-size="11" fill="var(--ink)">'+p.label+'</text>';
     if(p.label2) s+='<text x="'+x+'" y="'+(y+40)+'" text-anchor="middle" font-size="9.5" fill="var(--sub)">'+p.label2+'</text>';
   });
@@ -498,36 +504,36 @@ function svgMap(pts){
 }
 var MAPS = [
  { id:'spr', title:'🚉 札幌車站周邊', note:'D1晚上／D2・D4夜間 共用動線', pts:[
-   {label:'札幌駅・飯店', label2:'南口步行約5分'},
-   {label:'チカホ地下街', label2:'地下步行空間', via:'🚶 步行約3分'},
-   {label:'大通公園', via:'🚶 步行約15分'},
-   {label:'狸小路', label2:'晚餐商店街', via:'🚶 步行約5分'},
-   {label:'すすきの', label2:'薄野・成吉思汗烤肉', via:'🚶 步行約5分'},
-   {label:'藻岩山山頂', label2:'夜景展望台', via:'🚋+🚡 約35分'}
+   {label:'札幌駅・飯店', label2:'南口步行約5分', t:'~17:25'},
+   {label:'チカホ地下街', label2:'地下步行空間', via:'🚶 步行約3分', t:'~18:00'},
+   {label:'大通公園', via:'🚶 步行約15分', t:'~18:15'},
+   {label:'狸小路', label2:'晚餐商店街', via:'🚶 步行約5分', t:'~18:20'},
+   {label:'すすきの', label2:'薄野・成吉思汗烤肉', via:'🚶 步行約5分', t:'18:40~'},
+   {label:'藻岩山山頂', label2:'夜景展望台', via:'🚋+🚡 約35分', t:'20:35~'}
  ]},
  { id:'otr', title:'🚃 小樽一日路線', note:'D2 全日動線(JR快速エアポート往返)', pts:[
-   {label:'小樽駅'},
-   {label:'小樽運河', label2:'經舊手宮線遺跡', via:'🚶 步行約10分'},
-   {label:'三角市場', label2:'海鮮丼午餐', via:'🚶 步行約10分'},
-   {label:'堺町通', label2:'北一硝子・LeTAO', via:'🚶 步行約15分'},
-   {label:'天狗山', label2:'纜車夕景夜景', via:'🚌 步行+巴士約20分'},
-   {label:'JR回札幌', via:'🚌+🚆 約60分'}
+   {label:'小樽駅', t:'09:10'},
+   {label:'小樽運河', label2:'經舊手宮線遺跡', via:'🚶 步行約10分', t:'09:20–10:40'},
+   {label:'三角市場', label2:'海鮮丼午餐', via:'🚶 步行約10分', t:'11:00–12:00'},
+   {label:'堺町通', label2:'北一硝子・LeTAO', via:'🚶 步行約15分', t:'12:30–16:00'},
+   {label:'天狗山', label2:'纜車夕景夜景', via:'🚌 步行+巴士約20分', t:'17:00–18:40'},
+   {label:'JR回札幌', via:'🚌+🚆 約60分', t:'19:06'}
  ]},
  { id:'nbr', title:'♨️ 登別溫泉散步', note:'D3 上午(巴士總站寄物,輕裝來回)', pts:[
-   {label:'巴士總站', label2:'寄物置物櫃'},
-   {label:'地獄谷入口', via:'🚶 上坡約10分'},
-   {label:'鉄泉池', label2:'谷底棧道', via:'🚶 棧道約15分'},
-   {label:'大湯沼', via:'🚶 步行約20分'},
-   {label:'天然足湯', label2:'大湯沼川', via:'🚶 步行約10分'},
-   {label:'溫泉街午餐→巴士回駅', via:'🚶 步行約15分'}
+   {label:'巴士總站', label2:'寄物置物櫃', t:'10:20'},
+   {label:'地獄谷入口', via:'🚶 上坡約10分', t:'10:45'},
+   {label:'鉄泉池', label2:'谷底棧道', via:'🚶 棧道約15分', t:'11:00'},
+   {label:'大湯沼', via:'🚶 步行約20分', t:'12:00'},
+   {label:'天然足湯', label2:'大湯沼川', via:'🚶 步行約10分', t:'12:30'},
+   {label:'溫泉街午餐→巴士回駅', via:'🚶 步行約15分', t:'12:50–13:51'}
  ]},
  { id:'tya', title:'🌋 洞爺湖溫泉街', note:'D3夜～D4上午(以萬世閣為據點)', pts:[
-   {label:'巴士站→萬世閣', label2:'中央通'},
-   {label:'湖畔散步・足湯', via:'🚶 步行約5分'},
-   {label:'頂樓溫泉・晚餐', via:'🚶 步行約10分'},
-   {label:'湖畔看花火', label2:'20:45', via:'🚶 步行約5分'},
-   {label:'洞爺湖遊覽船', label2:'翌晨', via:'🚶 步行約5分'},
-   {label:'甜點→巴士回洞爺駅', via:'🚶+🚌 約30分'}
+   {label:'巴士站→萬世閣', label2:'中央通', t:'16:20'},
+   {label:'湖畔散步・足湯', via:'🚶 步行約5分', t:'17:00'},
+   {label:'頂樓溫泉・晚餐', via:'🚶 步行約10分', t:'18:00~'},
+   {label:'湖畔看花火', label2:'20:45', via:'🚶 步行約5分', t:'20:45'},
+   {label:'洞爺湖遊覽船', label2:'翌晨', via:'🚶 步行約5分', t:'翌09:00'},
+   {label:'甜點→巴士回洞爺駅', via:'🚶+🚌 約30分', t:'翌10:15~'}
  ]}
 ];
 
@@ -670,6 +676,21 @@ TABS.forEach(function(t){
 
 function esc(s){return s}
 
+/* 所在區域判定:依「日 + 事件序」對應到落腳區,顯示在卡片右側 */
+var DAY_AREA={
+  prep:[[0,'home']],
+  d1:[[0,'transit'],[9,'sapporo']],
+  d2:[[0,'sapporo'],[1,'transit'],[2,'otaru'],[9,'transit'],[10,'sapporo']],
+  d3:[[0,'sapporo'],[2,'transit'],[3,'noboribetsu'],[9,'transit'],[10,'toya']],
+  d4:[[0,'toya'],[7,'transit'],[9,'sapporo']],
+  d5:[[0,'sapporo'],[2,'transit'],[8,'home']]
+};
+var AREA_LABEL={home:'🏠台中',transit:'🚄移動',sapporo:'🏙️札幌',otaru:'🌊小樽',noboribetsu:'♨️登別',toya:'🌋洞爺'};
+var FOOD_AREA={sapporo:1,otaru:1,noboribetsu:1};
+function areaOf(dayId,idx){ var bp=DAY_AREA[dayId]; if(!bp) return ''; var a=''; for(var k=0;k<bp.length;k++){ if(idx>=bp[k][0]) a=bp[k][1]; } return a; }
+function areaChip(ar){ var L=AREA_LABEL[ar]; if(!L) return '';
+  return FOOD_AREA[ar] ? '<a class="area food" onclick="event.stopPropagation();jumpFood(\''+ar+'\')">'+L+' 🍜</a>' : '<span class="area">'+L+'</span>'; }
+
 function renderDay(day){
   var h='<div class="dayhead"><div class="d">'+day.d+'</div><div class="s">'+day.s+'</div></div>';
   day.events.forEach(function(ev,i){
@@ -681,7 +702,7 @@ function renderDay(day){
       '<div class="lo">📍 '+ev.loc+'<a class="gm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ev.loc)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗地圖</a></div>'+
       (ev.cost&&ev.cost!=='—'?'<span class="cost">'+ev.cost+'</span>':'')+
       '</div>'+
-      '<div class="ck" onclick="event.stopPropagation();toggleDone(\''+key+'\')">✓</div>'+
+      '<div class="rt"><div class="ck" onclick="event.stopPropagation();toggleDone(\''+key+'\')">✓</div>'+areaChip(areaOf(day.id,i))+'</div>'+
       '</div><div class="dt">';
     if(ev.steps.length){ h+='<b>怎麼做:</b><ol>'; ev.steps.forEach(function(s){h+='<li>'+s+'</li>'}); h+='</ol>'; }
     if(ev.tip) h+='<div class="tip"><b>💡 </b>'+ev.tip+'</div>';
@@ -717,7 +738,7 @@ function renderBudget(){
 
 /* ---------- 美食(YT實拍+官方查證) ---------- */
 var FOOD = [
- {area:'🍜 札幌(住3晚・重點)', items:[
+ {key:'sapporo', area:'🍜 札幌(住3晚・重點)', items:[
    {name:'すしどんぶり(海鮮丼専門店)', zh:'壽司丼・狸小路5丁目', loc:'すしどんぶり 狸小路', q:'すしどんぶり 狸小路5丁目',
     dish:'帝王蟹/海膽/生魚片綜合海鮮丼、烤帝王蟹腿、蟹肉披薩', price:'丼 約¥1,000起',
     note:'狸小路商店街內、雨雪不淋;可掃碼點單。開店限量500円丼(SNS每日10碗),平常約¥1,000。'},
@@ -743,7 +764,7 @@ var FOOD = [
     dish:'大閘蟹、白老牛烤肉、花魚刺身、海膽丼、田樂味增烤牡蠣、炸雞塊', price:'居酒屋價位',
     note:'本地人食堂氛圍、有中英韓菜單;名酒「十四代」清酒一人限一杯,想喝要早。'}
  ]},
- {area:'🦀 小樽(D2一日遊)', items:[
+ {key:'otaru', area:'🦀 小樽(D2一日遊)', items:[
    {name:'聖徳太子 飛鳥店', zh:'地元向壽司/海鮮・花園', loc:'聖徳太子 飛鳥店 小樽', q:'聖徳太子 飛鳥店 小樽市花園',
     dish:'午市壽司/海鮮丼定食,份量大、價格良心(千元有找)', price:'午餐 約¥1,000',
     note:'小樽本地人愛店,午 11:30–14:00。無中英菜單但有照片。YT直言比三角市場/堺町通划算很多。'},
@@ -751,7 +772,7 @@ var FOOD = [
     dish:'若鶏半身揚げ(炸半雞)¥1,190、若鶏定食 ¥1,490', price:'¥1,190–1,490',
     note:'1965創業名店、份量大;口味偏鹹,建議2–3人分食再配小菜。'}
  ]},
- {area:'♨️ 登別溫泉(D3上午)', items:[
+ {key:'noboribetsu', area:'♨️ 登別溫泉(D3上午)', items:[
    {name:'味の大王 登別温泉店', zh:'元祖地獄拉麵', loc:'味の大王 登別温泉店', q:'味の大王 登別温泉店',
     dish:'名物「地獄拉麵」¥900,辣度0丁目起每級+¥50', price:'¥900起',
     note:'溫泉街必吃;店主建議先點「0丁目」嚐辣與鮮的平衡。吃完10丁目以上可上牆留名。'},
@@ -764,7 +785,7 @@ function renderFood(){
   var h='<div class="dayhead"><div class="d">🍜 美食</div><div class="s">札幌・小樽・登別|YT實拍+官網/食べログ查證,每家可點↗地圖導航</div></div>';
   h+='<div class="card"><p>店名、招牌菜與價位整理自 YouTube 實拍影片並經官方查證,<b>價格僅供參考</b>、以現場為準。點各店「↗地圖」開 Google 導航(需網路/eSIM)。</p></div>';
   FOOD.forEach(function(g){
-    h+='<div class="sec">'+g.area+'</div>';
+    h+='<div class="sec" id="food-'+(g.key||'')+'">'+g.area+'</div>';
     g.items.forEach(function(f){
       h+='<div class="card"><h3>'+f.name+'</h3>';
       if(f.zh) h+='<div style="color:var(--sub);font-size:.78rem;margin:-3px 0 5px">'+f.zh+'</div>';
@@ -908,6 +929,14 @@ window.jumpArea=function(id){
   var onMaps=false;
   Array.prototype.forEach.call(nav.children,function(b){ if(b.dataset.id==='maps'&&b.classList.contains('on')) onMaps=true; });
   if(onMaps){ go(); } else { show('maps'); setTimeout(go,80); }
+};
+
+/* 點事件卡右側的區域「🍜」→ 切到美食頁並捲到該區 */
+window.jumpFood=function(key){
+  var go=function(){ var el=document.getElementById('food-'+key); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
+  var onFood=false;
+  Array.prototype.forEach.call(nav.children,function(b){ if(b.dataset.id==='food'&&b.classList.contains('on')) onFood=true; });
+  if(onFood){ go(); } else { show('food'); setTimeout(go,80); }
 };
 
 /* 「現在該做什麼」:日期符合時高亮當前事件 */
