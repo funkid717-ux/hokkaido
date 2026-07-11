@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>北海道 5天4夜 | 2026/8/26–8/30</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗾</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e7a6d">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="北海道行程">
+<style>
+:root{
+  --bg:#f4f2ec; --card:#ffffff; --ink:#2b2620; --sub:#7a7268; --line:#e3ded4;
+  --acc:#0e7a6d; --acc2:#c2571f; --chip:#ece8de; --done:#9aa39b; --gold:#b98a2f;
+  --shadow:0 1px 3px rgba(60,50,30,.10);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#191713; --card:#242119; --ink:#ece7dc; --sub:#9c948a; --line:#3a352b;
+    --acc:#3db3a2; --acc2:#e08a4e; --chip:#2f2b22; --done:#6b7268; --gold:#d3a54a;
+    --shadow:0 1px 3px rgba(0,0,0,.4); }
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.6; padding-bottom:40px}
+header{position:sticky; top:0; z-index:50; background:var(--bg);
+  border-bottom:1px solid var(--line); padding:10px 12px 0}
+h1{font-size:1.05rem; margin:0 0 2px; display:flex; align-items:baseline; gap:8px}
+h1 small{color:var(--sub); font-weight:400; font-size:.75rem}
+#now{font-size:.78rem; color:var(--acc); min-height:1.2em; margin-bottom:6px}
+nav{display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto; border:1px solid var(--line); background:var(--chip); color:var(--ink);
+  border-radius:18px; padding:6px 12px; font-size:.85rem; cursor:pointer; white-space:nowrap}
+nav button.on{background:var(--acc); border-color:var(--acc); color:#fff; font-weight:700}
+main{max-width:640px; margin:0 auto; padding:12px}
+.dayhead{margin:4px 2px 12px}
+.dayhead .d{font-size:1.25rem; font-weight:800}
+.dayhead .s{color:var(--sub); font-size:.85rem}
+.ev{background:var(--card); border:1px solid var(--line); border-radius:14px;
+  margin-bottom:10px; box-shadow:var(--shadow); overflow:hidden}
+.ev.hl{border-color:var(--acc); box-shadow:0 0 0 2px var(--acc)}
+.ev>.top{display:flex; gap:10px; padding:11px 12px; cursor:pointer; align-items:flex-start}
+.tm{flex:0 0 52px; text-align:center}
+.tm .t{font-weight:800; font-size:.95rem; font-variant-numeric:tabular-nums}
+.tm .dur{font-size:.66rem; color:var(--sub)}
+.bd{flex:1; min-width:0}
+.bd .ti{font-weight:700; font-size:.95rem}
+.bd .lo{display:block; font-size:.78rem; color:var(--sub); margin-top:1px; text-decoration:none}
+.bd .lo .gm{color:var(--acc); font-size:.7rem; margin-left:2px}
+.bd .lo:active{opacity:.6}
+.bd .cost{display:inline-block; margin-top:4px; font-size:.72rem; color:var(--gold);
+  border:1px solid var(--gold); border-radius:10px; padding:0 7px}
+.ck{flex:0 0 auto; width:24px; height:24px; border:2px solid var(--line); border-radius:50%;
+  margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:transparent}
+.ev.done .ck{background:var(--acc); border-color:var(--acc); color:#fff}
+.ev.done .ti,.ev.done .lo{color:var(--done); text-decoration:line-through}
+.dt{display:none; border-top:1px dashed var(--line); padding:10px 14px 12px; font-size:.86rem}
+.ev.open .dt{display:block}
+.dt ol{margin:4px 0 8px; padding-left:20px}
+.dt ol li{margin-bottom:5px}
+.dt .tip{background:var(--chip); border-radius:10px; padding:8px 10px; margin:8px 0; font-size:.8rem}
+.dt .tip b{color:var(--acc2)}
+.dt .alt{border-left:3px solid var(--acc2); padding:2px 10px; margin:8px 0; font-size:.8rem; color:var(--sub)}
+.dt .jp{font-size:.8rem; color:var(--sub); margin-top:6px}
+.dt .jp span{display:block; color:var(--ink)}
+.sec{font-weight:800; font-size:.95rem; margin:20px 4px 8px; color:var(--acc)}
+.list{background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
+.list .it{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-bottom:1px solid var(--line); cursor:pointer}
+.list .it:last-child{border-bottom:none}
+.list .it .bx{flex:0 0 auto; width:20px; height:20px; border:2px solid var(--line); border-radius:6px; margin-top:3px;
+  display:flex; align-items:center; justify-content:center; font-size:.7rem; color:transparent}
+.list .it.done .bx{background:var(--acc); border-color:var(--acc); color:#fff}
+.list .it.done .tx{color:var(--done); text-decoration:line-through}
+.list .it .tx b{display:block; font-size:.88rem}
+.list .it .tx i{font-style:normal; font-size:.76rem; color:var(--sub)}
+table{width:100%; border-collapse:collapse; background:var(--card); border-radius:14px; overflow:hidden;
+  border:1px solid var(--line); box-shadow:var(--shadow); font-size:.84rem}
+th,td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+th{background:var(--chip); font-size:.78rem}
+tr:last-child td{border-bottom:none}
+td.r,th.r{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+.note{font-size:.78rem; color:var(--sub); margin:8px 4px}
+.big{font-size:1.05rem; font-weight:800; color:var(--acc)}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+  padding:12px 14px; margin-bottom:10px; font-size:.86rem}
+.card h3{margin:0 0 6px; font-size:.92rem}
+.card p{margin:4px 0}
+.card .jpaddr{background:var(--chip); border-radius:8px; padding:6px 9px; margin:6px 0; font-size:.82rem}
+.reset{display:block; margin:26px auto 0; border:1px solid var(--line); background:none; color:var(--sub);
+  border-radius:10px; padding:6px 14px; font-size:.75rem; cursor:pointer}
+.schematic{width:100%; height:auto; display:block}
+.maptag{display:inline-block; font-size:.68rem; color:var(--sub); background:var(--chip); border-radius:8px; padding:1px 8px; margin:-2px 0 8px}
+.badge{display:inline-block; font-size:.68rem; border-radius:8px; padding:0 6px; margin-left:6px;
+  background:var(--acc2); color:#fff; vertical-align:2px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🗾 北海道 5天4夜 <small>台中 ⇄ 札幌・小樽・登別・洞爺湖|2026/8/26–8/30(兩人)</small></h1>
+  <div id="now"></div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+
+<script>
+'use strict';
+/* ============ 資料 ============ */
+var E = function(t,dur,icon,title,loc,cost,steps,tip,alt,jp){
+  return {t:t,dur:dur,icon:icon,title:title,loc:loc,cost:cost,steps:steps||[],tip:tip||'',alt:alt||'',jp:jp||''};
+};
+
+var DAYS = [
+/* ---------- 8/25 準備日 ---------- */
+{ id:'prep', tab:'8/25 準備', date:'2026-08-25', d:'8月25日(週二)', s:'出發前一天|台中家中完成所有準備', events:[
+  E('09:00','30分','✈️','最終確認機票與線上報到','手機/電腦','—',
+    ['打開航空公司 App(星宇/長榮),確認 8/26 去程與 8/30 回程訂位皆為「已確認」。',
+     '起飛前 48 小時(星宇)/24 小時(長榮)開放線上報到:兩人都完成報到、選相鄰座位,把電子登機證加入手機錢包。',
+     '確認護照效期至 2027/3 以後(入境日本需 6 個月以上有效期較保險)。',
+     '確認行李額度:含託運 23kg 與手提 7kg(依購買艙等,App 內可見)。'],
+    '本行程以「去:JX850 09:20→14:05(或 BR116 09:30→14:05)/回:JX851 或 BR115 15:20 起飛」規劃。若你買到的班次不同,只需平移 D1 早上與 D5 下午的時間。'),
+  E('09:30','20分','🌏','Visit Japan Web 填寫','手機','免費',
+    ['瀏覽器開啟 vjw-lp.digital.go.jp,登入或註冊帳號。',
+     '兩人各自(或代理家人)建立「入境・回國預定」:填 8/26 入境、航班號、住宿填札幌飯店名稱與電話。',
+     '完成「入境審查」與「海關申報」兩份問卷,產生 2 個 QR Code。',
+     '截圖存到手機相簿(機場網路慢,用截圖最快)。'],
+    '沒填也能入境(現場填紙本),但填好可走電子通道省 20–30 分鐘。'),
+  E('10:00','40分','💴','日幣現金與信用卡','銀行/線上','匯率參考 ¥1≈NT$0.22',
+    ['領日幣現金:兩人合計約 ¥60,000–80,000(NT$13,000–18,000)。台銀/兆豐線上結匯後到分行或機場取最划算。',
+     '確認 1–2 張信用卡已開通「國外交易」,優先用有海外回饋的卡(JCB/Visa 皆通)。',
+     '手機加入 Suica:iPhone 錢包 App →「+」→ 交通卡 → Suica,用 Apple Pay 儲值 ¥3,000/人(安卓非日版手機不支援,改在機場買實體 Welcome Suica 或用現金)。'],
+    '日本仍有不少小店(拉麵、市場、巴士)只收現金;道南巴士上車抽整理券、下車投現金,務必留 ¥1,000 以下零錢。'),
+  E('10:40','20分','📶','網路:eSIM 或分享器','Klook/KKday','約 NT$250–350/人',
+    ['在 Klook 或 KKday 買「日本 eSIM 5 天總量 3GB+ 或每日 1GB」方案,約 NT$250–350。',
+     '收到 QR Code 後立即安裝(設定→行動服務→加入 eSIM),但「漫遊開關」先關閉,落地日本再開。',
+     '兩人各買一份;主用地圖與轉乘查詢,用量足夠。'],
+    '行程表本身離線可用;eSIM 只是查地圖、聯絡與臨時查詢用。'),
+  E('11:00','30分','🗺️','下載離線地圖與 App','手機','免費',
+    ['Google Maps → 個人頭像 → 離線地圖 → 選取範圍:分別下載「札幌+小樽」「登別+洞爺湖」兩塊(共約 500MB)。',
+     '安裝「乘換案內」(Jorudan)或「Japan Travel by NAVITIME」查列車轉乘。',
+     '把本行程表 HTML 檔傳到兩人手機(LINE 傳檔或雲端下載),用瀏覽器開啟一次確認可看,加入書籤或主畫面。'],
+    '','','すみません (su-mi-ma-sen)|不好意思/謝謝'),
+  E('14:00','60分','🎒','打包行李(見下方清單)','家中','—',
+    ['8 月底北海道:白天 22–26°C、早晚 16–19°C,比台灣涼爽;洞爺湖夜晚看花火會涼。',
+     '衣物:短袖 4–5 件+薄長袖/薄外套各 1+長褲 2+舒適好走的鞋(每天 15,000 步起跳)。',
+     '一個 20–24 吋行李箱+一個後背包/人;預留 1/3 空間裝伴手禮。',
+     '單獨打包「洞爺湖一夜輕裝包」:換洗衣物 1 套+盥洗小物+充電線,8/28 只帶這包+背包出門,大行李寄放札幌飯店。'],
+    '溫泉旅館有浴衣、毛巾、吹風機,輕裝包不用帶睡衣毛巾。'),
+  E('16:00','20分','🚄','確認台中→桃園機場交通','統聯 App/高鐵 App','兩人約 NT$640–1,400',
+    ['方案A(推薦,直達):統聯 1623「台中→桃園機場」,於統聯 App 或官網訂 8/26 清晨約 04:50–05:10 從台中車站/朝馬出發的班次,車程約 2 小時,全票約 NT$320–350。',
+     '方案B(高鐵):台中站 06:0x 北上→桃園站 06:4x(自由座 NT$675),轉「統聯 705 接駁」或機捷(高鐵桃園→機場第二航廈約 20 分),07:15 前抵達。',
+     '訂完票把票券截圖存相簿。'],
+    '兩案都能在 07:20 前抵達機場,滿足 09:20 起飛前 2 小時報到。訂票時以 App 顯示的實際班次時間為準。'),
+  E('20:00','10分','🏠','家務收尾與早睡','家中','—',
+    ['關瓦斯總開關、拔非必要插頭、倒垃圾、窗戶上鎖。',
+     '護照、錢包、手機、行動電源、eSIM QR、住宿確認信截圖——放同一個隨身包。',
+     '設鬧鐘 04:00,今晚 22:30 前就寢。'])
+]},
+
+/* ---------- D1 8/26 ---------- */
+{ id:'d1', tab:'D1 8/26', date:'2026-08-26', d:'8月26日(週三)D1', s:'台中 → 桃園 ✈ 新千歲 → 札幌|宿:札幌車站周邊', events:[
+  E('04:00','—','⏰','起床、最後檢查','台中家中','—',
+    ['盥洗、著輕便衣物(機上冷氣強,帶薄外套上機)。',
+     '出門前三確認:護照 ×2、手機/錢包、行李箱鑰匙。']),
+  E('04:40','20分','🚕','計程車 → 統聯台中車站/朝馬站','台中西屯區','約 NT$150–250',
+    ['用 Uber/55688 叫車,西屯區到朝馬轉運站約 10–15 分。',
+     '提早 15 分鐘到站取票/驗票。'],
+    '若走高鐵方案:改 05:30 叫車到高鐵台中站,搭 06:0x 班次。'),
+  E('05:10','120分','🚌','統聯 1623 → 桃園機場','國道客運','NT$320–350/人',
+    ['上車出示電子票或取票憑證,行李放行李艙。',
+     '車上補眠;約 07:10 抵達第二航廈(星宇在第一航廈,司機會廣播,JX 請在 T1 下車)。'],
+    '','塞車備案:若 06:50 仍未過機場交流道,下車後直奔報到櫃檯掛行李即可,登機證已在手機。'),
+  E('07:15','45分','🛄','報到、託運行李','桃園機場(JX:T1/BR:T2)','—',
+    ['找航空公司報到區:已線上報到者走「行李託運(Bag Drop)」快速通道。',
+     '出示護照+電子登機證,託運行李(鋰電池、行動電源一律隨身)。',
+     '和櫃檯確認行李直掛新千歲(CTS)。']),
+  E('08:00','40分','🛂','安檢+證照查驗 → 登機門','管制區','—',
+    ['液體 100ml 規定、筆電平板拿出;出境查驗可走自動通關(e-Gate)。',
+     '進管制區後買水/早餐(飯糰、三明治),留意登機門號碼與變動。']),
+  E('08:50','—','🛫','登機(09:20 起飛)','登機門','—',
+    ['開始登機約為起飛前 30–40 分鐘;登機後把外套拿出、行李上架。',
+     '飛行時間約 3 小時 45 分,日本比台灣快 1 小時(手機落地自動跳)。',
+     '機上填寫或確認 Visit Japan Web QR 可用(截圖已存相簿)。'],
+    '本表以星宇 JX850 09:20→14:05 為準;長榮 BR116 09:30→14:05 幾乎同時段,流程完全相同。'),
+  E('14:05','60分','🛬','抵達新千歲機場、入境','CTS 國際線','—',
+    ['(以下皆為日本時間)下機後跟「到着/Arrivals」指標走。',
+     '入境審查:出示護照+Visit Japan Web「入境審查」QR 截圖,按指紋拍照。',
+     '領行李後過海關:出示「海關申報」QR 走電子申報閘門。',
+     '出關後在國際線 2F,跟「JR」指標走連絡通道到國內線 B1(步行約 10 分)。'],
+    '','','よろしくお願いします (yo-ro-shi-ku o-ne-gai-shi-masu)|麻煩你了'),
+  E('15:10','20分','🎫','買 JR 車票 → 月台','新千歲空港駅 B1','¥1,150/人(uシート+¥840)',
+    ['在綠色「指定席券売機」(有中文介面)買「快速エアポート→札幌」乘車券 ¥1,150;手機 Suica 直接嗶進站也可以。',
+     '拖行李建議加買 4 號車廂「uシート」指定席(+¥840):必有座位、有行李架。',
+     '快速エアポート約每 10–12 分一班,車程 37–40 分。'],
+    '若在此順便到「みどりの窓口」(JR外籍旅客服務處)一次買齊 8/28 北斗6号、8/29 北斗11号指定席,後面兩天就不用再排隊(見 D3 卡片票價)。'),
+  E('15:33','40分','🚆','快速エアポート → 札幌','JR 千歳線','(已含上項)',
+    ['15:33/15:45 前後皆有班次,上車後行李放置架用鋼絲鎖或放眼前。',
+     '16:10–16:25 抵札幌駅,人多跟著「南口」指標出站。']),
+  E('16:30','30分','🏨','飯店 Check-in','札幌車站南口周邊(如ソラリア西鉄)','兩人 3 晚約 NT$12,000–18,000',
+    ['本行程住「札幌車站周邊」三晚同一家(8/26、27、29),首選ソラリア西鉄ホテル札幌(北4西5,南口步行 3 分,有大浴場、早餐海鮮丼);備選 JR東日本メッツプレミア、三井ガーデン。',
+     '出示護照辦理入住,索取飯店名片(上有日文地址,迷路給計程車看)。',
+     '放行李、稍作休息,把「洞爺湖輕裝包」先整理出來。'],
+    '入住時順便告知櫃檯:8/28 退房後要寄放大行李一晚、8/29 再回來住(預訂時已備註)。',
+    '','荷物を預かってもらえますか (ni-mo-tsu o azukatte moraemasuka)|可以寄放行李嗎?'),
+  E('17:30','30分','🚶','地下步行空間 → 狸小路','札幌駅前通地下歩行空間(チカホ)','免費',
+    ['從飯店走回札幌駅,搭地下步行空間(チカホ)一路向南,不用日曬雨淋,15 分鐘到大通,再 5 分鐘接狸小路商店街。',
+     '沿路先認識環境:大通公園、電視塔在東側。']),
+  E('18:00','80分','🍖','晚餐:成吉思汗烤肉','だるま本店(すすきの)','¥3,000–4,000/人',
+    ['店址:南5西4(狸小路南側兩個路口)。招牌生羊肉+蔬菜,配白飯或啤酒。',
+     '本店常排隊 30–60 分;附近有 4 家分店(4.4店、6.4店…),哪家隊短進哪家。',
+     '衣服會沾烤肉味,店家提供除味噴霧與紙圍裙。'],
+    '','排隊超過 60 分的備案:松尾ジンギスカン札幌駅前店(可訂位)或薄野「Suage+」湯咖哩(¥1,500)。',
+    'これをください (ko-re o ku-da-sai)|請給我這個'),
+  E('19:45','25分','🚋','市電 → 藻岩山纜車','搭市電(路面電車)內回り','市電 ¥230/人',
+    ['薄野「すすきの」市電站上車(內回り方向),約 20 分到「ロープウェイ入口」站。',
+     '下車後搭「免費接駁巴士」上山麓駅(每 15 分一班),或步行上坡 10 分。'],
+    '','若下雨或雲層低(山頂看不到夜景),改逛狸小路+唐吉訶德,夜景延到 D2 或 D4。'),
+  E('20:15','75分','🌃','藻岩山夜景','もいわ山山頂展望台','纜車來回套票 ¥2,100/人',
+    ['買「ロープウェイ+ミニケーブルカー」來回套票 ¥2,100,兩段接駁上山頂(共約 15 分)。',
+     '山頂 531m:札幌市區燈海+石狩灣,「日本新三大夜景」;山上約 18–20°C,穿外套。',
+     '拍照、敲幸福之鐘;21:30 是上行末班,下行請搭 21:50 前的班次。'],
+    '營業時間(夏季)10:30–22:00。'),
+  E('22:00','30分','🛏️','回飯店','市電原路返回','—',
+    ['市電回薄野→チカホ走回或地鐵南北線「すすきの→さっぽろ」一站(¥210)。',
+     '回飯店泡大浴場,明天 07:00 起床。'])
+]},
+
+/* ---------- D2 8/27 ---------- */
+{ id:'d2', tab:'D2 8/27', date:'2026-08-27', d:'8月27日(週四)D2', s:'小樽一日遊:運河・堺町通・天狗山夕景|宿:札幌(同飯店)', events:[
+  E('07:00','60分','🍳','起床、飯店早餐','飯店','已含房價',
+    ['ソラリア早餐有自助海鮮丼(鮭魚卵/甜蝦自己加),值得吃飽再出門。',
+     '今天全程輕裝:背包+相機+零錢。']),
+  E('08:30','40分','🚆','JR 快速エアポート → 小樽','札幌駅(自由席即可)','¥750/人',
+    ['札幌駅用 Suica 嗶進站,往「小樽・手稲方面」月台,搭快速エアポート(每 30 分一班,如 08:40 前後)。',
+     '坐左側靠窗:過銭函後是貼著石狩灣的海岸線,是這段路的招牌風景。',
+     '09:10–09:20 抵小樽駅。']),
+  E('09:20','30分','📸','小樽駅 → 舊手宮線遺跡','中央通步行','免費',
+    ['出站直走中央通(往海的方向),3 分鐘遇到「舊手宮線」廢棄鐵道遺跡,鐵軌上拍照很好看。',
+     '續行 7 分鐘到小樽運河。']),
+  E('10:00','40分','🛶','小樽運河遊船(Day Cruise)','中央橋乘船處','¥1,800/人',
+    ['在中央橋畔售票亭買票(可能需等下一班,每 30 分一班,40 分鐘一圈)。',
+     '船長沿途解說運河與倉庫群歷史(日文為主,有英文摘要)。'],
+    '','不想搭船:沿運河步道走到淺草橋展望點拍經典角度,省 ¥1,800。'),
+  E('11:00','60分','🦐','三角市場海鮮丼(早午餐)','小樽駅旁三角市場','¥2,000–3,500/人',
+    ['回到小樽駅旁「三角市場」(狹長坡道市場),名店:滝波食堂、味処たけだ。',
+     '點「自選 3–4 色丼」(海膽/鮭魚卵/甜蝦/蟹肉),付現金為主。',
+     '人多先登記姓名候位,約 15–30 分。'],
+    '','排隊太長備案:堺町通「若鶏時代なると」半身炸雞+壽司(¥1,500),11:00 開門。'),
+  E('12:30','150分','🏮','堺町通商店街漫步','小樽堺町通り','預算自訂',
+    ['從運河端往南逛,重點順序:',
+     '北一硝子三号館:169 盞油燈的「北一ホール」咖啡廳,點一杯燈光下的咖啡(¥600)。',
+     '六花亭・北菓楼小樽館(相鄰):北菓楼「夢不思議」大泡芙 ¥250 現吃;六花亭買奶油葡萄夾心餅乾。',
+     'LeTAO 本店:2F 咖啡座吃雙層起司蛋糕套餐(¥1,200),頂樓鐘樓免費看街景。',
+     '小樽オルゴール堂本館+蒸氣鐘:挑一個音樂盒當紀念(¥2,000 起)。'],
+    '甜點都想吃就兩人分食;伴手禮在此先看好品項,回程在新千歲機場也買得到(不用提著走)。'),
+  E('15:30','30分','☕','休息:出拔小路或運河食堂','堺町通周邊','¥500–1,000',
+    ['走累了找間咖啡店休息;夏天推薦山中牧場霜淇淋(¥450)。']),
+  E('16:30','30分','🚌','巴士 → 天狗山','小樽駅前巴士總站 9 號線','¥240/人',
+    ['逛回小樽駅前,巴士總站搭「天狗山ロープウェイ線(9系統)」約 20 分到終點。',
+     '中央巴士有「巴士+纜車套票」約 ¥1,700,售票口直接問。'],
+    '','體力不足或天氣差:跳過天狗山,提早在運河拍暮色(18:00 瓦斯燈點燈)後回札幌。'),
+  E('17:00','90分','🌄','天狗山纜車+夕陽夜景','天狗山山頂','纜車來回 ¥1,400/人',
+    ['纜車 4 分鐘登頂(9:00–21:00,每 12 分一班)。',
+     '山頂看小樽港與石狩灣;8 月底日落約 18:10,待到 18:40 看「北海道三大夜景」的小樽燈火。',
+     '有天狗館(摸天狗鼻求好運)與展望餐廳。']),
+  E('19:06','40分','🚆','JR 回札幌','小樽駅','¥750/人',
+    ['巴士 18:5x 回小樽駅(車程 20 分),搭 19:0x–19:3x 快速エアポート回札幌(每 30 分一班)。',
+     '19:45–20:10 抵札幌。']),
+  E('20:15','60分','🍣','晚餐:根室花まる迴轉壽司','札幌ステラプレイス 6F(車站樓上)','¥2,500–3,500/人',
+    ['札幌駅直結 STELLAR PLACE 6F,取號碼牌(店門口機器),看板叫號。',
+     '必點:白板「本日鮮魚」、花咲蟹鐵砲汁、秋刀魚、牡丹蝦。'],
+    '','等位過久備案:同層「ラーメン共和国」或 B1「えびそば一幻」總店級分店。'),
+  E('21:30','—','🛏️','回房休息','飯店','—',
+    ['明天要換宿洞爺湖:確認輕裝包、把大行李整理好(明早寄放櫃檯)。',
+     '手機、相機充飽電。'])
+]},
+
+/* ---------- D3 8/28 ---------- */
+{ id:'d3', tab:'D3 8/28', date:'2026-08-28', d:'8月28日(週五)D3', s:'登別地獄谷 → 洞爺湖溫泉|宿:洞爺湖萬世閣(一泊二食+湖畔花火)', events:[
+  E('07:00','60分','🍳','早餐、寄放大行李','飯店','—',
+    ['吃早餐後辦理退房(本行程 8/28 退房、8/29 回來重新入住同一家)。',
+     '跟櫃檯說「行李寄放到明天下午」,拿寄物單拍照存證。',
+     '只帶輕裝包+背包出門。']),
+  E('08:20','20分','🎫','札幌駅取票/買票','JR 札幌駅','¥4,780/人(札幌→登別 指定席)',
+    ['若 D1 已在機場買好票→直接進站。否則到西口「みどりの窓口」或指定席券売機買:',
+     '① 北斗6号 札幌 08:43→登別 09:54(指定席 ¥4,780)。',
+     '② 北斗14号 登別 14:41→洞爺 15:21(約 ¥3,180)。',
+     '③ 明日北斗11号 洞爺 14:09→札幌 16:04(¥6,360)。',
+     '特急全車指定席,一定要劃位;月台看電子看板(通常 8 番線)。'],
+    '省錢招:提前在「えきねっと」網站買「トクだ値」早鳥票可打 7–9 折,但需註冊+綁卡,嫌麻煩就現場買。'),
+  E('08:43','71分','🚆','特急北斗6号 → 登別','札幌駅 8 番線','(上項已含)',
+    ['對號入座;行李放座位上方或最後排後方空間。',
+     '沿途:苫小牧後右側偶見太平洋。09:54 抵登別駅。']),
+  E('10:04','16分','🚌','道南巴士 → 登別溫泉','登別駅前 1 號站牌','¥450/人(現金)',
+    ['出站即巴士站,搭 10:04 或 10:20 往「登別温泉」方向(車程 14–16 分)。',
+     '前門/後門上車抽「整理券」,下車把整理券+現金投運賃箱(車上可換千圓鈔)。',
+     '「登別温泉」總站下車。'],
+    '','錯過就等 10:54/11:20 的班次(每 30–60 分一班);或站前計程車約 ¥2,000/10 分。'),
+  E('10:30','15分','🧳','寄物+索取地圖','登別溫泉巴士總站','置物櫃 ¥300–500',
+    ['總站內有投幣置物櫃,輕裝包鎖進去(留背包)。',
+     '拿一份溫泉街地圖;先確認回程巴士 13:51/14:10 的站牌位置。']),
+  E('10:45','75分','🌋','地獄谷遊步道','登別地獄谷','免費',
+    ['沿溫泉街主路上坡 10 分即入口(經過閻魔堂、湯鬼神像)。',
+     '走木棧道深入谷底「鉄泉池」:硫磺蒸氣、火山地貌,約 40–50 分一圈。',
+     '硫磺味重屬正常;棧道平緩好走。']),
+  E('12:00','45分','♨️','大湯沼+天然足湯','大湯沼川探勝步道','免費',
+    ['從地獄谷續走「大湯沼探勝步道」約 20 分到大湯沼(乳白色高溫沼澤)展望點。',
+     '折返走「大湯沼川天然足湯」:溪水就是溫泉,坐木平台泡腳(自備小毛巾,現場也有販賣機)。'],
+    '','腳程慢或天雨路滑:略過大湯沼,地獄谷看完直接回溫泉街午餐,時間更寬裕。'),
+  E('12:50','50分','🍜','午餐:溫泉街','味の大王 登別温泉店','¥1,000–1,500/人',
+    ['招牌「地獄ラーメン」辣味噌拉麵,辣度用「丁目」計算,點 1–2 丁目即可。',
+     '備案:福庵手打蕎麥、溫泉市場海鮮定食(¥2,000)。',
+     '飯後買「湯まんじゅう」溫泉饅頭當點心。']),
+  E('13:51','12分','🚌','巴士下山 → 登別駅','登別温泉總站','¥450/人',
+    ['取回寄物,搭 13:51 往登別駅前/苫小牧方向班次(14:03 抵站前)。',
+     '備班:14:10 發、14:22 抵——仍趕得上 14:41 火車,但別再晚了。']),
+  E('14:41','40分','🚆','特急北斗14号 → 洞爺','登別駅','約 ¥3,180/人(已購)',
+    ['月台通常為跨線橋另一側(往東室蘭/函館方向),提早 10 分鐘過去。',
+     '15:21 抵洞爺駅。']),
+  E('15:25','30分','🎫','洞爺駅小歇+確認明日車票','洞爺駅','—',
+    ['洞爺是有人小站:若明日北斗11号票未買,在窗口購買(洞爺→札幌 ¥6,360/人)。',
+     '站前商店買飲料;巴士站牌就在站前廣場。']),
+  E('15:59','19分','🚌','道南巴士 → 洞爺湖溫泉(萬世閣前)','洞爺駅前','¥400/人(現金)',
+    ['15:59 發車,搭到「中央通」站(16:18)下車即萬世閣正門;或「洞爺湖温泉」總站(16:15)下車走 3 分。',
+     '一樣抽整理券、下車投現。'],
+    '','若火車誤點錯過:站前計程車到溫泉街約 ¥3,500/15 分,兩人分攤可接受。'),
+  E('16:20','40分','🏨','萬世閣 Check-in','洞爺湖萬世閣 Lakeside Terrace','兩人一泊二食約 NT$7,000–9,500',
+    ['出示護照與訂房確認信;確認「湖景房」與晚餐/早餐時段(晚餐建議選 18:00 場次)。',
+     '和櫃檯確認今晚花火 20:45 施放、最佳觀賞位置(湖畔或房間窗邊)。',
+     '進房換浴衣,窗外就是洞爺湖。']),
+  E('17:00','50分','🚶','湖畔散步+免費足湯','洞爺湖溫泉街湖畔','免費',
+    ['沿湖畔遊步道走到「洞龍(とうろん)の湯」足湯,面湖泡腳。',
+     '沿路有雕刻公園作品與花火觀賞點,先探好晚上位置。']),
+  E('18:00','90分','🦀','溫泉旅館自助晚餐','萬世閣餐廳','已含一泊二食',
+    ['自助餐:雪蟹腳吃到飽、烤牛排、生魚片、北海道在地食材與甜點。',
+     '穿浴衣用餐 OK;酒水另計(生啤 ¥700 前後)。']),
+  E('20:30','40分','🎆','洞爺湖 Long Run 花火大會','湖畔(或房間窗邊)','免費',
+    ['20:45–21:05,約 450 發,從湖上移動的船隻施放,溫泉街正面湖畔都看得到。',
+     '20:30 前到湖畔卡位(帶房間毛巾防涼);或在湖景房窗邊/旅館湖側大廳看。',
+     '雨天照常施放,強風才取消。']),
+  E('21:15','60分','♨️','頂樓露天溫泉「星の湯」','萬世閣大浴場','已含',
+    ['花火後泡湯人較多,可先回房休息 15 分再上去。',
+     '露天池面湖,夜晚星空+湖面燈火;毛巾房內自取。',
+     '泡完喝瓶北海道牛乳(販賣機 ¥180),23:00 前就寢。'])
+]},
+
+/* ---------- D4 8/29 ---------- */
+{ id:'d4', tab:'D4 8/29', date:'2026-08-29', d:'8月29日(週六)D4', s:'洞爺湖遊覽 → 回札幌購物+螃蟹晚餐|宿:札幌(同飯店)', events:[
+  E('06:30','40分','♨️','晨湯','萬世閣大浴場','已含',
+    ['早晨的露天風呂看湖面晨霧與羊蹄山,是住溫泉旅館的精華時段。']),
+  E('07:30','60分','🍳','自助早餐','萬世閣餐廳','已含',
+    ['現做歐姆蛋、烤魚、湯咖哩、哈密瓜;吃飽一點,午餐會比較晚。']),
+  E('08:45','15分','🧳','退房、寄放輕裝包','萬世閣櫃檯','—',
+    ['辦退房(確認酒水等額外消費),行李寄櫃檯,說明 13:00 左右回來取。'],
+    '','','チェックアウトお願いします (check-out o-ne-gai-shi-masu)|麻煩退房'),
+  E('09:00','60分','⛴️','洞爺湖遊覽船','溫泉街遊覽船碼頭(旅館旁)','¥1,800/人',
+    ['碼頭在溫泉街中段,08:30 起每 30 分一班;搭 09:00 班次,環湖+中島約 50 分。',
+     '夏季可在中島下船散步(森林步道+博物館),再搭下一班回來;若想下島,總時間抓 90 分。',
+     '甲板餵海鷗(船上賣飼料 ¥200)。'],
+    '','替代方案(二選一):道南巴士或計程車到「昭和新山+有珠山纜車」(纜車來回 ¥1,800,山頂看火山口與洞爺湖全景,含車程約 2.5 小時)——想看火山選這個,想輕鬆選遊覽船。'),
+  E('10:15','75分','🚶','湖畔慢遊+甜點','洞爺湖溫泉街','¥500–1,000',
+    ['「わかさいも本舗」本店:買招牌わかさいも(大福薯點心)+現炸いもてん(¥200)。',
+     '岡田屋:名物「白いおしるこ」白年糕紅豆湯(牛奶湯底,¥800)。',
+     '湖畔雕刻公園拍照、踩水。']),
+  E('11:45','60分','🍽️','午餐:望羊蹄','洞爺湖溫泉街(郵局旁)','¥1,500–2,500/人',
+    ['1946 年老洋食館,推薦漢堡排定食、蛋包飯;建議 11:45 開門前後進場免排隊。'],
+    '','客滿備案:仙堂庵(蕎麥/丼,面湖窗景)或超商簡餐(火車上吃)。'),
+  E('13:00','15分','🧳','取行李 → 巴士站','萬世閣 → 洞爺湖温泉總站','—',
+    ['取行李,走 3 分鐘到「洞爺湖温泉」巴士總站(遊客中心旁)。']),
+  E('13:31','19分','🚌','道南巴士 → 洞爺駅','洞爺湖温泉總站','¥400/人',
+    ['13:31 發車(此為 4–9 月時刻),13:50 前抵洞爺駅。',
+     '錯過的話下一班 16:01 會來不及,務必準時——備案為計程車 ¥3,500。']),
+  E('14:09','115分','🚆','特急北斗11号 → 札幌','洞爺駅','¥6,360/人(已購)',
+    ['對號入座,右側座位過噴火灣時看海。',
+     '16:04 抵札幌駅。'],
+    '','若上午選了昭和新山、時間不夠:改搭北斗13号 洞爺 15:30→札幌 17:30(車票需改劃位,窗口 5 分鐘辦好)。'),
+  E('16:15','30分','🏨','回飯店 Check-in、取行李','札幌同一家飯店','—',
+    ['重新入住+取回寄放的大行李,行李歸位。']),
+  E('17:00','120分','🛍️','札幌購物時段','狸小路+大通','預算自訂',
+    ['チカホ地下街走到大通/狸小路:',
+     '藥妝比價:狸小路的サツドラ/マツキヨ,單筆滿 ¥5,000 未稅可退稅(帶護照)。',
+     '唐吉訶德狸小路店(24h):零食、雜貨一次補齊。',
+     '想買服飾:大通 PARCO、三越;想買電器:ビックカメラ札幌駅店。'],
+    '退稅商品(消耗品)會封袋,託運前別拆。'),
+  E('19:15','90分','🦀','晚餐:螃蟹會席','かに本家 札幌駅前本店','¥8,000–12,000/人',
+    ['本行程的大餐:帝王蟹/松葉蟹會席套餐(刺身、焼き蟹、蟹すき鍋、雑炊)。',
+     '強烈建議 8/25 前先電話或官網訂位(+81-11-222-0018,可英文);報名字+人數+時間。'],
+    '','預算調整備案:氷雪の門(すすきの,螃蟹專門較平價)或 GARAKU 湯咖哩(¥1,500,排隊 30 分)——省下的預算給購物。'),
+  E('21:15','45分','🍨','宵夜散步:夜パフェ','薄野 Parfaiteria PaL','¥1,600/人',
+    ['札幌名物「〆パフェ」(收尾聖代):酒香水果聖代當一天的句點。',
+     '回程經大通看電視塔夜景。'],
+    '','累了就直接回飯店,明天是最後一天。'),
+  E('22:30','—','🧳','打包行李','飯店','—',
+    ['把伴手禮、退稅封袋放進大行李;確認明天 10:30 退房。',
+     '液體(酒、乳液)一律託運;白色戀人等餅乾放手提防壓。'])
+]},
+
+/* ---------- D5 8/30 ---------- */
+{ id:'d5', tab:'D5 8/30', date:'2026-08-30', d:'8月30日(週日)D5', s:'札幌 → 新千歲(機場採買)✈ 桃園 → 台中到家', events:[
+  E('07:30','60分','🍳','起床、早餐、最後整理','飯店','—',
+    ['最後一次飯店早餐;回房確認房間無遺留物(充電器最常忘!)。']),
+  E('10:30','15分','🏨','退房 → 札幌駅','飯店','—',
+    ['退房後拖行李走到札幌駅(3 分),往「新千歳空港」方向月台。']),
+  E('10:48','40分','🚆','快速エアポート → 新千歲空港','札幌駅','¥1,150/人',
+    ['約每 10–12 分一班(10:4x/10:5x 皆可),11:25–11:35 抵機場 B1。',
+     '行李多可加 uシート(+¥840)。']),
+  E('11:35','105分','🎁','機場午餐+伴手禮採買','新千歲機場國內線航廈 2F–4F','預算自訂',
+    ['新千歲機場本身就是景點,動線:先吃再買、最後過檢。',
+     '午餐:3F「北海道ラーメン道場」一幻えびそば(鮮蝦湯頭,¥1,000)或空港限定壽司。',
+     '伴手禮(2F 國內線購物街最齊):白い恋人、六花亭、ロイズ生巧克力(有保冷袋)、じゃがポックル薯條三兄弟、きのとや起司塔(現烤)。',
+     '有時間加碼:Royce\' Chocolate World(免費,巧克力工廠展示)、ドラえもん わくわくスカイパーク(哆啦A夢樂園,入場區 ¥800)。',
+     '13:00 前結束採買,拖行李走連絡通道到「國際線航廈」(步行 8–10 分)。'],
+    '國際線出境後免稅店規模小,想買的請在國內線這邊買齊。液體類(酒、生巧克力附保冷劑)放託運行李最保險——所以先採買、再去託運。'),
+  E('13:20','60分','🛄','國際線報到、託運、出境','新千歲機場國際線 3F','—',
+    ['JX851/BR115 報到櫃檯起飛前 2.5 小時開櫃、前 60 分關櫃;13:20 前完成託運最穩。',
+     '安檢+出境審查(自動閘門);裡面座位少,先買水。'],
+    '本表以 15:20 起飛規劃(JX851 15:20→19:05/BR115 15:20→18:30);若你訂到 CI131 則為 14:40 起飛,整段提前 40 分鐘。'),
+  E('14:45','—','🛫','登機(15:20 起飛)','登機門','—',
+    ['飛行約 4 小時 15 分;台灣時間比日本慢 1 小時。',
+     '機上把 Visit Japan Web 忘掉吧——回台灣用「入境快速通關」:常客證或自動查驗通關(已註冊者)。']),
+  E('18:45','45分','🛬','抵達桃園機場、入境','TPE(台灣時間)','—',
+    ['18:30–19:05 落地(依航班),入境走自動通關,領行李。',
+     '農產品、肉製品不可帶入境(飯店拿的水果、機場買的肉乾要注意)。']),
+  E('19:45','130分','🚌','客運回台中','桃園機場 1F 客運櫃檯','NT$320–350/人',
+    ['入境大廳買統聯 1623 往台中最近班次(約每 30–60 分一班,營運至深夜)。',
+     '車程約 2 小時,約 22:00 抵朝馬/台中車站。'],
+    '','高鐵備案:機捷普通車 → 高鐵桃園(¥— NT$35),20:3x 高鐵 → 21:1x 台中站,轉計程車回西屯(總價較高但快 30–40 分)。'),
+  E('22:15','15分','🏠','計程車到家','朝馬 → 西屯區','約 NT$150–250',
+    ['到家!行李先別急著整理,退稅封袋此時可拆。',
+     '把這份行程表留著——下次旅行的範本。🎉'])
+]}
+];
+
+/* ---------- 打包清單(準備頁) ---------- */
+var PACK = [
+ ['證件金流','護照 ×2(效期>6個月)','機票/訂房確認信截圖','日幣現金 ¥60,000+','信用卡 ×2(開通海外)','台幣(回程車資)'],
+ ['電子','手機+充電線','行動電源(隨身!)','萬用轉接頭(日本兩腳扁插,台灣插頭直接用)','耳機','相機/記憶卡'],
+ ['衣物','短袖 4–5 件','薄長袖/外套 1–2 件','長褲 2 件','內衣襪子 5 套','好走的鞋+拖鞋','帽子/太陽眼鏡'],
+ ['藥妝雜物','個人藥品(腸胃/感冒/止痛)','防曬乳','保養品小瓶裝','小毛巾(足湯用)','摺疊傘','環保袋(購物)'],
+ ['旅途中','洞爺湖一夜輕裝包(先分裝)','原子筆','口罩數個','濕紙巾','鋰電池全部隨身不託運']
+];
+
+/* ---------- 預算 ---------- */
+var BUDGET = [
+ ['機票(星宇/長榮來回 ×2 人)','—','30,000–36,000','8 月底旺季,越早訂越便宜;紅眼/虎航可省 8–10k'],
+ ['住宿:札幌 3 晚(車站周邊雙人房)','—','12,000–18,000','ソラリア/METS/三井Garden 比價'],
+ ['住宿:洞爺湖萬世閣 1 晚(一泊二食湖景)','¥32,000–43,000','7,000–9,500','含自助晚餐(蟹腳)+早餐'],
+ ['JR+巴士+地鐵(全程 ×2 人)','約 ¥41,000','9,000','明細見下表'],
+ ['台灣段交通(客運來回+計程車 ×2 人)','—','2,200','高鐵方案 +1,500'],
+ ['門票(藻岩山/運河船/天狗山/遊覽船 ×2 人)','¥14,200','3,100','—'],
+ ['餐食(5 天 ×2 人,含螃蟹大餐)','¥55,000–70,000','12,000–15,500','螃蟹會席佔 ¥16,000–24,000'],
+ ['購物+雜支預留','—','10,000–20,000','藥妝/伴手禮/紀念品'],
+ ['<b>合計(兩人)</b>','—','<b>約 85,000–113,000</b>','符合 8–12 萬舒適預算']
+];
+var JRD = [
+ ['8/26 新千歲空港→札幌(快速エアポート)','¥1,150'],
+ ['8/27 札幌⇄小樽 來回','¥1,500'],
+ ['8/28 札幌→登別(北斗6号 指定席)','¥4,780'],
+ ['8/28 登別駅⇄登別溫泉 巴士','¥900'],
+ ['8/28 登別→洞爺(北斗14号 指定席)','約 ¥3,180'],
+ ['8/28+8/29 洞爺駅⇄洞爺湖溫泉 巴士','¥800'],
+ ['8/29 洞爺→札幌(北斗11号 指定席)','¥6,360'],
+ ['8/30 札幌→新千歲空港(快速エアポート)','¥1,150'],
+ ['市電/地鐵(藻岩山等)','約 ¥700'],
+ ['<b>每人合計</b>','<b>約 ¥20,520</b>']
+];
+
+/* ---------- 地圖(離線示意圖) ---------- */
+function pill(cx,cy,text){
+  var w=Math.max(58, 15+text.length*7.3);
+  return '<rect x="'+(cx-w/2)+'" y="'+(cy-11)+'" width="'+w+'" height="16" rx="8" fill="var(--chip)"/>'+
+    '<text x="'+cx+'" y="'+(cy+1)+'" text-anchor="middle" font-size="10" font-weight="600" fill="var(--acc2)">'+text+'</text>';
+}
+/* 逐點縱向動線圖:每點含 label(地名)/label2(小字說明)/via(與上一點的交通方式+時間) */
+function svgMap(pts){
+  var W=300, GAP=100, TOP=32, BOT=48, x=W/2;
+  var H=TOP+(pts.length-1)*GAP+BOT;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" class="schematic">';
+  var path=pts.map(function(p,i){return (i===0?'M':'L')+x+','+(TOP+i*GAP)}).join(' ');
+  s+='<path d="'+path+'" fill="none" stroke="var(--acc)" stroke-width="2" stroke-dasharray="4 3" opacity="0.5"/>';
+  pts.forEach(function(p,i){
+    var y=TOP+i*GAP;
+    if(i>0 && p.via) s+=pill(x, TOP+(i-1)*GAP+GAP*0.62, p.via);
+    s+='<circle cx="'+x+'" cy="'+y+'" r="11" fill="var(--card)" stroke="var(--acc)" stroke-width="2.5"/>';
+    s+='<text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--acc)">'+(i+1)+'</text>';
+    s+='<text x="'+x+'" y="'+(y+26)+'" text-anchor="middle" font-size="11" fill="var(--ink)">'+p.label+'</text>';
+    if(p.label2) s+='<text x="'+x+'" y="'+(y+40)+'" text-anchor="middle" font-size="9.5" fill="var(--sub)">'+p.label2+'</text>';
+  });
+  s+='</svg>';
+  return s;
+}
+var MAPS = [
+ { title:'🚉 札幌車站周邊', note:'D1晚上／D2・D4夜間 共用動線', pts:[
+   {label:'札幌駅・飯店', label2:'南口步行約5分'},
+   {label:'チカホ地下街', label2:'地下步行空間', via:'🚶 步行約3分'},
+   {label:'大通公園', via:'🚶 步行約15分'},
+   {label:'狸小路', label2:'晚餐商店街', via:'🚶 步行約5分'},
+   {label:'すすきの', label2:'薄野・成吉思汗烤肉', via:'🚶 步行約5分'},
+   {label:'藻岩山山頂', label2:'夜景展望台', via:'🚋+🚡 約35分'}
+ ]},
+ { title:'🚃 小樽一日路線', note:'D2 全日動線(JR快速エアポート往返)', pts:[
+   {label:'小樽駅'},
+   {label:'小樽運河', label2:'經舊手宮線遺跡', via:'🚶 步行約10分'},
+   {label:'三角市場', label2:'海鮮丼午餐', via:'🚶 步行約10分'},
+   {label:'堺町通', label2:'北一硝子・LeTAO', via:'🚶 步行約15分'},
+   {label:'天狗山', label2:'纜車夕景夜景', via:'🚌 步行+巴士約20分'},
+   {label:'JR回札幌', via:'🚌+🚆 約60分'}
+ ]},
+ { title:'♨️ 登別溫泉散步', note:'D3 上午(巴士總站寄物,輕裝來回)', pts:[
+   {label:'巴士總站', label2:'寄物置物櫃'},
+   {label:'地獄谷入口', via:'🚶 上坡約10分'},
+   {label:'鉄泉池', label2:'谷底棧道', via:'🚶 棧道約15分'},
+   {label:'大湯沼', via:'🚶 步行約20分'},
+   {label:'天然足湯', label2:'大湯沼川', via:'🚶 步行約10分'},
+   {label:'溫泉街午餐→巴士回駅', via:'🚶 步行約15分'}
+ ]},
+ { title:'🌋 洞爺湖溫泉街', note:'D3夜～D4上午(以萬世閣為據點)', pts:[
+   {label:'巴士站→萬世閣', label2:'中央通'},
+   {label:'湖畔散步・足湯', via:'🚶 步行約5分'},
+   {label:'頂樓溫泉・晚餐', via:'🚶 步行約10分'},
+   {label:'湖畔看花火', label2:'20:45', via:'🚶 步行約5分'},
+   {label:'洞爺湖遊覽船', label2:'翌晨', via:'🚶 步行約5分'},
+   {label:'甜點→巴士回洞爺駅', via:'🚶+🚌 約30分'}
+ ]}
+];
+
+/* 整體地理位置示意(區域相對位置,非精確比例尺) */
+var OV = { W:300, H:460,
+  nodes:[
+   {id:'otr', x:55,  y:55,  label:'小樽',       label2:'D2 一日遊'},
+   {id:'spr', x:160, y:140, label:'札幌',       label2:'D1–D4 住宿'},
+   {id:'cts', x:275, y:215, label:'新千歲空港', label2:'D1抵達・D5出發'},
+   {id:'nbr', x:235, y:400, label:'登別',       label2:'D3 上午'},
+   {id:'tya', x:70,  y:420, label:'洞爺湖',     label2:'D3夜–D4 住宿'}
+  ],
+  edges:[
+   {a:'cts',b:'spr', label:'JR快速 37分', t:0.7},
+   {a:'spr',b:'otr', label:'JR快速 33分', t:0.5},
+   {a:'spr',b:'nbr', label:'特急北斗 71分', t:0.7},
+   {a:'nbr',b:'tya', label:'特急+巴士 33分', t:0.5},
+   {a:'tya',b:'spr', label:'特急北斗 115分', t:0.3}
+  ]
+};
+function svgOverview(){
+  var byId={}; OV.nodes.forEach(function(n){byId[n.id]=n});
+  var s='<svg viewBox="0 0 '+OV.W+' '+OV.H+'" class="schematic">';
+  OV.edges.forEach(function(e){
+    var a=byId[e.a], b=byId[e.b], t=(e.t!==undefined?e.t:0.5);
+    s+='<line x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" stroke="var(--acc)" stroke-width="2" stroke-dasharray="4 3" opacity="0.5"/>';
+    s+=pill(a.x+(b.x-a.x)*t, a.y+(b.y-a.y)*t, e.label);
+  });
+  OV.nodes.forEach(function(n){
+    s+='<circle cx="'+n.x+'" cy="'+n.y+'" r="13" fill="var(--card)" stroke="var(--acc)" stroke-width="2.5"/>';
+    s+='<text x="'+n.x+'" y="'+(n.y+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--acc)">'+n.label.slice(0,1)+'</text>';
+    s+='<text x="'+n.x+'" y="'+(n.y+27)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">'+n.label+'</text>';
+    s+='<text x="'+n.x+'" y="'+(n.y+40)+'" text-anchor="middle" font-size="9.5" fill="var(--sub)">'+n.label2+'</text>';
+  });
+  s+='</svg>';
+  return s;
+}
+
+function renderMaps(){
+  var h='<div class="dayhead"><div class="d">🗺️ 地圖(離線示意圖)</div><div class="s">依行程走訪順序繪製,非精確地理比例尺</div></div>';
+  h+='<div class="card"><p>此頁完全離線可用。圖上號碼＝當天走訪順序,橘色小標籤＝與上一站的交通方式和所需時間,皆非實際方位或距離。想要精確定位與導航,可點各事件卡片「📍 地點」後方的「↗地圖」(需有網路/eSIM 才能開啟)。</p></div>';
+  h+='<div class="card"><h3>🗾 北海道整體位置示意</h3><span class="maptag">5 個落腳點的相對地理位置與區間交通</span>'+svgOverview()+'</div>';
+  MAPS.forEach(function(m){
+    h+='<div class="card"><h3>'+m.title+'</h3><span class="maptag">'+m.note+'</span>'+svgMap(m.pts)+'</div>';
+  });
+  return h;
+}
+
+/* ---------- 實用資訊 ---------- */
+var INFO_HTML = ''+
+'<div class="card"><h3>📱 本行程表使用方式(離線)</h3>'+
+'<p>此檔案為單一 HTML,<b>不需要網路</b>。用 LINE/雲端把檔案傳到手機後,以瀏覽器(Chrome/Safari)開啟。</p>'+
+'<p>iPhone:用「檔案」App 點開 → 分享 → 用 Safari 開啟 → 加入主畫面。安卓:Chrome 開啟 → 選單 → 加到主畫面。</p>'+
+'<p>點事件卡可展開「怎麼做」細節;點左邊圓圈打勾標記完成(勾選會自動保存在手機)。旅程當天打開會自動跳到當日並標亮現在的事件。</p>'+
+'<p>「🗺️ 地圖」頁籤是離線手繪示意圖(依走訪順序,非精確比例尺);每張事件卡的「📍 地點」文字可點擊開 Google 地圖精確定位,但這個功能需要網路/eSIM 才能開啟。</p></div>'+
+'<div class="card"><h3>🏨 住宿資訊(給計程車司機看日文)</h3>'+
+'<p><b>札幌(8/26–27、8/29 共 3 晚)</b>|首選:ソラリア西鉄ホテル札幌</p>'+
+'<div class="jpaddr">ソラリア西鉄ホテル札幌<br>〒060-0004 札幌市中央区北4条西5丁目1-2<br>TEL 011-208-5555(札幌駅南口 徒歩3分)</div>'+
+'<p><b>洞爺湖(8/28 1 晚)</b>|洞爺湖萬世閣 Lakeside Terrace</p>'+
+'<div class="jpaddr">洞爺湖万世閣 ホテルレイクサイドテラス<br>〒049-5721 北海道虻田郡洞爺湖町洞爺湖温泉21<br>TEL 0570-08-3500(巴士「中央通」站下車即達)</div>'+
+'<p class="note">※ 訂房順序建議:先訂萬世閣湖景房(8月週五晚容易滿),再訂札幌;Booking/agoda/樂天 Travel 三方比價,選「可免費取消」方案。</p></div>'+
+'<div class="card"><h3>🚑 緊急聯絡</h3>'+
+'<p>日本報警 <b>110</b>|救護/火警 <b>119</b>(可要求中文口譯)</p>'+
+'<p>台北駐日經濟文化代表處 札幌分處:札幌市中央区北4条西4丁目1 伊藤ビル5F|+81-11-222-2930|急難救助 +81-80-1460-2568</p>'+
+'<p>外交部旅外急難救助(台灣撥打)0800-085-095;日本境內 001-010-800-0885-0885</p>'+
+'<p>信用卡掛失與海外救援電話:出發前抄在紙上放錢包。</p></div>'+
+'<div class="card"><h3>🗣️ 常用日文短句</h3>'+
+'<p>すみません(su-mi-ma-sen)— 不好意思/借過/呼喚店員</p>'+
+'<p>これをください(ko-re o ku-da-sai)— 請給我這個(指菜單)</p>'+
+'<p>いくらですか(i-ku-ra desu-ka)— 多少錢?</p>'+
+'<p>〜はどこですか(wa do-ko desu-ka)— 〜在哪裡?(駅=車站/トイレ=廁所)</p>'+
+'<p>免税お願いします(men-zei o-ne-gai-shi-masu)— 麻煩退稅</p>'+
+'<p>カードで払えますか(kaado de ha-ra-e-masu-ka)— 可以刷卡嗎?</p>'+
+'<p>予約しています、(名字)です — 我有預約,我是〇〇</p></div>'+
+'<div class="card"><h3>💰 退稅與購物規則</h3>'+
+'<p>同一店家同日消費滿 ¥5,000(未稅)可退 10% 消費稅,結帳時出示<b>護照正本</b>。</p>'+
+'<p>消耗品(食品/藥妝)會封袋,在日本境內不可拆封;一般物品(衣服/電器)可直接使用。</p>'+
+'<p>藥妝店多數自動免稅;百貨公司先付款再到退稅櫃檯辦理(收 1.1–1.5% 手續費)。</p></div>'+
+'<div class="card"><h3>🌤️ 天氣與穿著(8月底)</h3>'+
+'<p>札幌/小樽:白天 22–26°C、夜 17–19°C。洞爺湖/登別山區:夜 15–18°C。</p>'+
+'<p>白天短袖即可,傍晚後(藻岩山、天狗山、花火)需薄外套。8 月底偶有秋雨,摺疊傘常備。</p></div>'+
+'<div class="card"><h3>⚠️ 本表班次資料來源與再確認</h3>'+
+'<p>JR 特急時刻為 2026/3 改點後時刻表;道南巴士為 2026 年 4–9 月時刻;洞爺湖花火經確認為 2026/4/28–10/31 每晚 20:45 施放。</p>'+
+'<p><b>出發前一週</b>請再用「乘換案內」App 抽查 3 班關鍵車次(北斗6号/14号/11号)是否異動;巴士以站牌現場時刻為準。</p></div>';
+
+/* ============ 渲染 ============ */
+var store = {
+  get:function(k){ try{return JSON.parse(localStorage.getItem('hk26_'+k))||{}}catch(e){return{}} },
+  set:function(k,v){ try{localStorage.setItem('hk26_'+k,JSON.stringify(v))}catch(e){} }
+};
+var doneEv = store.get('ev'), donePk = store.get('pk');
+
+var nav = document.getElementById('nav');
+var main = document.getElementById('main');
+var TABS = DAYS.map(function(d){return {id:d.id, label:d.tab}})
+  .concat([{id:'maps',label:'🗺️ 地圖'},{id:'budget',label:'💰 預算'},{id:'info',label:'ℹ️ 資訊'}]);
+
+TABS.forEach(function(t){
+  var b=document.createElement('button');
+  b.textContent=t.label; b.dataset.id=t.id;
+  b.onclick=function(){show(t.id)};
+  nav.appendChild(b);
+});
+
+function esc(s){return s}
+
+function renderDay(day){
+  var h='<div class="dayhead"><div class="d">'+day.d+'</div><div class="s">'+day.s+'</div></div>';
+  day.events.forEach(function(ev,i){
+    var key=day.id+'_'+i;
+    h+='<div class="ev'+(doneEv[key]?' done':'')+'" id="ev_'+key+'" data-key="'+key+'">'+
+      '<div class="top" onclick="toggleEv(this.parentNode)">'+
+      '<div class="tm"><div class="t">'+ev.t+'</div><div class="dur">'+ev.dur+'</div></div>'+
+      '<div class="bd"><div class="ti">'+ev.icon+' '+ev.title+'</div>'+
+      '<a class="lo" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ev.loc)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 '+ev.loc+'<span class="gm">↗地圖</span></a>'+
+      (ev.cost&&ev.cost!=='—'?'<span class="cost">'+ev.cost+'</span>':'')+
+      '</div>'+
+      '<div class="ck" onclick="event.stopPropagation();toggleDone(\''+key+'\')">✓</div>'+
+      '</div><div class="dt">';
+    if(ev.steps.length){ h+='<b>怎麼做:</b><ol>'; ev.steps.forEach(function(s){h+='<li>'+s+'</li>'}); h+='</ol>'; }
+    if(ev.tip) h+='<div class="tip"><b>💡 </b>'+ev.tip+'</div>';
+    if(ev.alt) h+='<div class="alt"><b>備案:</b>'+ev.alt+'</div>';
+    if(ev.jp){ var p=ev.jp.split('|'); h+='<div class="jp">🗣️ <span>'+p[0]+'</span>'+(p[1]||'')+'</div>'; }
+    h+='</div></div>';
+  });
+  if(day.id==='prep'){
+    h+='<div class="sec">🎒 打包清單(點擊打勾)</div>';
+    PACK.forEach(function(g,gi){
+      h+='<div class="note" style="margin-top:12px"><b>'+g[0]+'</b></div><div class="list">';
+      for(var j=1;j<g.length;j++){
+        var pk='p'+gi+'_'+j;
+        h+='<div class="it'+(donePk[pk]?' done':'')+'" onclick="togglePk(this,\''+pk+'\')">'+
+           '<div class="bx">✓</div><div class="tx"><b>'+g[j]+'</b></div></div>';
+      }
+      h+='</div>';
+    });
+  }
+  return h;
+}
+
+function renderBudget(){
+  var h='<div class="dayhead"><div class="d">💰 兩人總預算</div><div class="s">舒適級|目標 NT$80,000–120,000</div></div>';
+  h+='<table><tr><th>項目</th><th class="r">日圓</th><th class="r">台幣(NT$)</th></tr>';
+  BUDGET.forEach(function(r){ h+='<tr><td>'+r[0]+(r[3]?'<br><i style="font-size:.72rem;color:var(--sub)">'+r[3]+'</i>':'')+'</td><td class="r">'+r[1]+'</td><td class="r">'+r[2]+'</td></tr>'; });
+  h+='</table><p class="note">匯率以 ¥1 ≈ NT$0.22 估算。</p>';
+  h+='<div class="sec">🚆 日本交通明細(每人)</div><table><tr><th>區間</th><th class="r">票價</th></tr>';
+  JRD.forEach(function(r){ h+='<tr><td>'+r[0]+'</td><td class="r">'+r[1]+'</td></tr>'; });
+  h+='</table><p class="note">北海道鐵路周遊券 5 日 ¥21,000/人 > 單買合計,故<b>不買周遊券、逐段購票</b>最省;會用「えきねっと」再省 10–30%(トクだ値早鳥)。特急全車指定席,務必劃位。</p>';
+  return h;
+}
+
+function show(id){
+  Array.prototype.forEach.call(nav.children,function(b){b.classList.toggle('on',b.dataset.id===id)});
+  var day=null;
+  for(var i=0;i<DAYS.length;i++) if(DAYS[i].id===id) day=DAYS[i];
+  if(day) main.innerHTML=renderDay(day);
+  else if(id==='maps') main.innerHTML=renderMaps();
+  else if(id==='budget') main.innerHTML=renderBudget();
+  else if(id==='info') main.innerHTML='<div class="dayhead"><div class="d">ℹ️ 實用資訊</div></div>'+INFO_HTML+
+    '<button class="reset" onclick="if(confirm(\'清除所有勾選紀錄?\')){localStorage.removeItem(\'hk26_ev\');localStorage.removeItem(\'hk26_pk\');location.reload()}">重設所有勾選</button>';
+  window.scrollTo(0,0);
+  if(day) highlightNow(day);
+  store.set('tab',{id:id});
+}
+
+window.toggleEv=function(el){ el.classList.toggle('open'); };
+window.toggleDone=function(key){
+  doneEv[key]=!doneEv[key]; store.set('ev',doneEv);
+  var el=document.getElementById('ev_'+key); if(el) el.classList.toggle('done',!!doneEv[key]);
+};
+window.togglePk=function(el,key){
+  donePk[key]=!donePk[key]; store.set('pk',donePk);
+  el.classList.toggle('done',!!donePk[key]);
+};
+
+/* 「現在該做什麼」:日期符合時高亮當前事件 */
+function pad(n){return (n<10?'0':'')+n}
+function highlightNow(day){
+  var now=new Date();
+  var today=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  if(day.date!==today) return;
+  var cur=pad(now.getHours())+':'+pad(now.getMinutes());
+  var idx=-1;
+  day.events.forEach(function(ev,i){ if(ev.t<=cur) idx=i; });
+  if(idx<0) idx=0;
+  var el=document.getElementById('ev_'+day.id+'_'+idx);
+  if(el){ el.classList.add('hl'); el.classList.add('open');
+    setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'center'}) },150); }
+}
+function tickNow(){
+  var now=new Date();
+  var today=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  var d=null; DAYS.forEach(function(x){ if(x.date===today) d=x; });
+  var el=document.getElementById('now');
+  if(d){ el.textContent='📅 今天是旅程「'+d.tab+'」— 已自動標亮現在時段(日本時間以手機為準)'; }
+  else{
+    var t0=new Date('2026-08-26T00:00:00');
+    var diff=Math.ceil((t0-now)/86400000);
+    el.textContent = diff>0 ? '⏳ 距離出發還有 '+diff+' 天' : (now>new Date('2026-08-31T00:00:00')?'🎉 旅程已完成,歡迎回家!':'');
+  }
+}
+
+/* 啟動:旅程期間自動開當日頁,否則開上次頁或準備頁 */
+(function(){
+  tickNow(); setInterval(tickNow,60000);
+  var now=new Date();
+  var today=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  var open=null;
+  DAYS.forEach(function(x){ if(x.date===today) open=x.id; });
+  if(!open){ var last=store.get('tab'); open=(last&&last.id)?last.id:'prep'; }
+  show(open);
+})();
+
+/* 註冊 Service Worker:首次連線後把整份行程快取,之後完全離線可用 */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
