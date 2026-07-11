@@ -50,15 +50,18 @@ main{max-width:640px; margin:0 auto; padding:12px}
 .tm .dur{font-size:.66rem; color:var(--sub)}
 .bd{flex:1; min-width:0}
 .bd .ti{font-weight:700; font-size:.95rem}
-.bd .lo{display:block; font-size:.78rem; color:var(--sub); margin-top:1px; text-decoration:none}
-.bd .lo .gm{color:var(--acc); font-size:.7rem; margin-left:2px}
-.bd .lo:active{opacity:.6}
+.bd .lo{display:block; font-size:.78rem; color:var(--sub); margin-top:2px; text-decoration:none}
+.bd .lo .gm{display:inline-block; color:var(--acc); font-size:.7rem; margin-left:6px;
+  border:1px solid var(--acc); border-radius:11px; padding:2px 9px; text-decoration:none;
+  vertical-align:middle; line-height:1.3}
+.bd .lo .gm:active{background:var(--acc); color:#fff}
 .bd .cost{display:inline-block; margin-top:4px; font-size:.72rem; color:var(--gold);
   border:1px solid var(--gold); border-radius:10px; padding:0 7px}
 .ck{flex:0 0 auto; width:24px; height:24px; border:2px solid var(--line); border-radius:50%;
   margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:transparent}
 .ev.done .ck{background:var(--acc); border-color:var(--acc); color:#fff}
 .ev.done .ti,.ev.done .lo{color:var(--done); text-decoration:line-through}
+.ev.done .lo .gm{text-decoration:none; color:var(--acc); border-color:var(--acc)}
 .dt{display:none; border-top:1px dashed var(--line); padding:10px 14px 12px; font-size:.86rem}
 .ev.open .dt{display:block}
 .dt ol{margin:4px 0 8px; padding-left:20px}
@@ -639,7 +642,7 @@ function renderDay(day){
       '<div class="top" onclick="toggleEv(this.parentNode)">'+
       '<div class="tm"><div class="t">'+ev.t+'</div><div class="dur">'+ev.dur+'</div></div>'+
       '<div class="bd"><div class="ti">'+ev.icon+' '+ev.title+'</div>'+
-      '<a class="lo" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ev.loc)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 '+ev.loc+'<span class="gm">↗地圖</span></a>'+
+      '<div class="lo">📍 '+ev.loc+'<a class="gm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ev.loc)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗地圖</a></div>'+
       (ev.cost&&ev.cost!=='—'?'<span class="cost">'+ev.cost+'</span>':'')+
       '</div>'+
       '<div class="ck" onclick="event.stopPropagation();toggleDone(\''+key+'\')">✓</div>'+
