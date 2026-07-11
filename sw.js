@@ -1,5 +1,5 @@
 /* 北海道行程 離線 Service Worker */
-var CACHE = 'hokkaido-2026-v13';
+var CACHE = 'hokkaido-2026-v14';
 var ASSETS = [
   './',
   './index.html',
