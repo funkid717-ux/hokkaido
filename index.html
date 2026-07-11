@@ -623,7 +623,8 @@ var doneEv = store.get('ev'), donePk = store.get('pk');
 var nav = document.getElementById('nav');
 var main = document.getElementById('main');
 var TABS = DAYS.map(function(d){return {id:d.id, label:d.tab}})
-  .concat([{id:'maps',label:'🗺️ 地圖'},{id:'budget',label:'💰 預算'},{id:'info',label:'ℹ️ 資訊'}]);
+  .concat([{id:'food',label:'🍜 美食'},{id:'stay',label:'🏨 住宿'},{id:'move',label:'🚌 交通'},
+           {id:'maps',label:'🗺️ 地圖'},{id:'budget',label:'💰 預算'},{id:'info',label:'ℹ️ 資訊'}]);
 
 TABS.forEach(function(t){
   var b=document.createElement('button');
@@ -679,11 +680,157 @@ function renderBudget(){
   return h;
 }
 
+/* ---------- 美食(YT實拍+官方查證) ---------- */
+var FOOD = [
+ {area:'🍜 札幌(住3晚・重點)', items:[
+   {name:'すしどんぶり(海鮮丼専門店)', zh:'壽司丼・狸小路5丁目', loc:'すしどんぶり 狸小路', q:'すしどんぶり 狸小路5丁目',
+    dish:'帝王蟹/海膽/生魚片綜合海鮮丼、烤帝王蟹腿、蟹肉披薩', price:'丼 約¥1,000起',
+    note:'狸小路商店街內、雨雪不淋;可掃碼點單。開店限量500円丼(SNS每日10碗),平常約¥1,000。'},
+   {name:'うめぇ堂', zh:'場外市場・根室直送活蟹', loc:'うめぇ堂 札幌場外市場', q:'うめぇ堂 札幌場外市場',
+    dish:'水槽現挑活帝王蟹,現稱現殺,一半水煮一半炭烤;各式海鮮丼', price:'時價(依蟹重)',
+    note:'札幌中央批發「場外市場」內,想蟹肉吃到爽來這。距札幌駅一小段,建議搭車或計程車。'},
+   {name:'スープカレー 天馬 札幌オーロラタウン店', zh:'湯咖哩・大通地下街', loc:'天馬 札幌オーロラタウン', q:'咖喱 カレーパン 天馬 札幌オーロラタウン店',
+    dish:'骨付雞腿+野菜湯咖哩 ¥1,300、牛肉咖哩 ¥1,100、咖哩麵包 ¥250(強推半熟蛋)', price:'約¥1,100–1,400',
+    note:'大通駅直結オーロラタウン地下,不用排隊又平價;11:00–21:00。YT實測比排隊名店更順口。'},
+   {name:'どんぐり(DONGURI)', zh:'人氣麵包・Cocono Susukino/大通', loc:'どんぐり ススキノ', q:'どんぐり ココノススキノ店',
+    dish:'爆餡玉米麵包(又脆又甜・神物)、蜂蜜芥末烤雞腿、炸雞腿串', price:'單品約¥130起',
+    note:'份量大又便宜、幾乎不踩雷;狸小路 Cocono Susukino 樓下與大通皆有分店,品項略不同。'},
+   {name:'きのとや(Kinotoya)', zh:'甜點・大通 odori bisse', loc:'きのとや 大通ビッセ', q:'きのとや 大通ビッセ店',
+    dish:'起司塔 ¥250、蘋果派 ¥400、大通限定歐姆百匯水果蛋糕卷 ¥990', price:'¥250–990',
+    note:'冰淇淋連5年獲新千歲機場第一;逛累了進來歇腳吃甜點。薄野 pole town 地下街也有分店。'},
+   {name:'ホワイトコージ White Cosy', zh:'四葉牛乳咖啡廳・札幌駅', loc:'ホワイトコージ 札幌ステラプレイス', q:'ホワイトコージ 札幌ステラプレイス店',
+    dish:'四葉奶油鬆餅+甜菜糖蜜 ¥1,050、義大利麵套餐 ¥1,380(含牛奶+冰淇淋)', price:'約¥1,050–1,380',
+    note:'四葉牛乳直營、純北海道奶香;札幌駅 Stellar Place 內,平價超值,YT超推。'},
+   {name:'六花亭 圓山店', zh:'甜點+輕食・圓山', loc:'六花亭 円山店', q:'六花亭 円山店',
+    dish:'紅酒牛肉燴飯 ¥1,250(醬熬2週)、草莓蛋糕 ¥356、雪起司', price:'約¥140–1,250',
+    note:'二樓弧形落地窗景;可順遊北海道神宮,吃現烤福餅¥280、六花亭判官餅¥140(附免費熱茶)。'},
+   {name:'はまっこ(Hamakko)', zh:'北海道料理居酒屋', loc:'はまっこ 札幌', q:'はまっこ 札幌 居酒屋',
+    dish:'大閘蟹、白老牛烤肉、花魚刺身、海膽丼、田樂味增烤牡蠣、炸雞塊', price:'居酒屋價位',
+    note:'本地人食堂氛圍、有中英韓菜單;名酒「十四代」清酒一人限一杯,想喝要早。'}
+ ]},
+ {area:'🦀 小樽(D2一日遊)', items:[
+   {name:'聖徳太子 飛鳥店', zh:'地元向壽司/海鮮・花園', loc:'聖徳太子 飛鳥店 小樽', q:'聖徳太子 飛鳥店 小樽市花園',
+    dish:'午市壽司/海鮮丼定食,份量大、價格良心(千元有找)', price:'午餐 約¥1,000',
+    note:'小樽本地人愛店,午 11:30–14:00。無中英菜單但有照片。YT直言比三角市場/堺町通划算很多。'},
+   {name:'若鶏時代 なると 本店', zh:'名物炸半雞・小樽站附近', loc:'若鶏時代なると 本店 小樽', q:'若鶏時代なると本店 小樽',
+    dish:'若鶏半身揚げ(炸半雞)¥1,190、若鶏定食 ¥1,490', price:'¥1,190–1,490',
+    note:'1965創業名店、份量大;口味偏鹹,建議2–3人分食再配小菜。'}
+ ]},
+ {area:'♨️ 登別溫泉(D3上午)', items:[
+   {name:'味の大王 登別温泉店', zh:'元祖地獄拉麵', loc:'味の大王 登別温泉店', q:'味の大王 登別温泉店',
+    dish:'名物「地獄拉麵」¥900,辣度0丁目起每級+¥50', price:'¥900起',
+    note:'溫泉街必吃;店主建議先點「0丁目」嚐辣與鮮的平衡。吃完10丁目以上可上牆留名。'},
+   {name:'温泉市場', zh:'海鮮丼・炸蝦丼・霜淇淋', loc:'温泉市場 登別温泉', q:'温泉市場 登別温泉',
+    dish:'海鮮丼、えび天丼(炸蝦丼)、地獄蟹飯、生乳霜淇淋', price:'丼 約¥1,500',
+    note:'YT實拍推薦;地獄谷散步前後補給的好選擇,就在溫泉街上。'}
+ ]}
+];
+function renderFood(){
+  var h='<div class="dayhead"><div class="d">🍜 美食</div><div class="s">札幌・小樽・登別|YT實拍+官網/食べログ查證,每家可點↗地圖導航</div></div>';
+  h+='<div class="card"><p>店名、招牌菜與價位整理自 YouTube 實拍影片並經官方查證,<b>價格僅供參考</b>、以現場為準。點各店「↗地圖」開 Google 導航(需網路/eSIM)。</p></div>';
+  FOOD.forEach(function(g){
+    h+='<div class="sec">'+g.area+'</div>';
+    g.items.forEach(function(f){
+      h+='<div class="card"><h3>'+f.name+'</h3>';
+      if(f.zh) h+='<div style="color:var(--sub);font-size:.78rem;margin:-3px 0 5px">'+f.zh+'</div>';
+      h+='<div class="lo">📍 '+f.loc+'<a class="gm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(f.q||f.loc)+'" target="_blank" rel="noopener">↗地圖</a></div>';
+      h+='<p style="margin:5px 0">🍽️ '+f.dish+'</p>';
+      if(f.price) h+='<span class="cost">'+f.price+'</span>';
+      if(f.note) h+='<div class="tip"><b>💡 </b>'+f.note+'</div>';
+      h+='</div>';
+    });
+  });
+  h+='<div class="card"><p class="note">🌋 洞爺湖:晚餐/早餐為洞爺湖萬世閣「一泊二食」自助(約90種),詳見「🏨 住宿」頁,故不另列。</p></div>';
+  return h;
+}
+
+/* ---------- 住宿 ---------- */
+var STAY = [
+ { name:'ソラリア西鉄ホテル札幌', zh:'索拉利亞西鐵飯店 札幌', badge:'札幌 3 晚(8/26・8/27・8/29)',
+   loc:'ソラリア西鉄ホテル札幌', q:'ソラリア西鉄ホテル札幌', inout:'入住 15:00｜退房 11:00',
+   addr:'〒060-0004 札幌市中央区北4条西5丁目1-2 ／ TEL 011-208-5555',
+   access:'JR札幌駅 南口 徒步約3分(地下直通,雨雪不淋)',
+   bath:'2F 展望大浴場 15:00–翌1:00、5:30–9:00',
+   meal:'早餐 6:30–10:00(L.O.9:30)2F「SOLVERT」自助,北海道山海食材',
+   rows:[
+     ['房型','雙人房(禁菸),行程首選;訂房選「可免費取消」方案'],
+     ['寄物策略','8/28 去洞爺前先退房、大行李寄放櫃台,輕裝出發;8/29 回札幌再入住取行李'],
+     ['為何選這','正對札幌駅,拉車去小樽/登別/洞爺都最順,女生單獨也安心']
+   ],
+   tips:'8/28 早上要趕 08:43 北斗6号,前晚先整理好當日輕裝,大行李請櫃台代為保管;早餐可能來不及吃。' },
+ { name:'洞爺湖万世閣 レイクサイドテラス', zh:'洞爺湖萬世閣 湖畔露台', badge:'洞爺湖 1 晚(8/28)一泊二食',
+   loc:'洞爺湖万世閣ホテルレイクサイドテラス', q:'洞爺湖万世閣ホテルレイクサイドテラス', inout:'入住 15:00｜退房 10:00',
+   addr:'〒049-5721 北海道虻田郡洞爺湖町洞爺湖温泉21 ／ TEL 0570-08-3500',
+   access:'道南巴士「洞爺湖温泉」下車即達(付現,不能刷Suica)',
+   bath:'頂樓展望露天風呂「星の湯」無邊際湖景,附壺湯・寢湯・足湯露台',
+   meal:'晚餐 18:00–20:30(最終入場19:45)自助約90種・現做ライブキッチン(石窯pizza/現炸天婦羅/海鮮丼);早餐 7:00–9:00',
+   rows:[
+     ['房型','湖景房(訂房務必選「レイクビュー」),8月週五晚熱門要早訂'],
+     ['花火','8/28 晚 20:45 花火就在飯店前湖面施放,晚餐後直接到湖畔看'],
+     ['一泊二食','蟹腳/現做料理吃到飽;晚餐建議訂早段18:00,才有充裕時間泡湯+看花火']
+   ],
+   tips:'Check-in 會拿到晚餐入場券(記載時段)。動線建議:先泡頂樓露天風呂看夕陽湖景 → 吃晚餐 → 20:45 湖畔看花火。' }
+];
+function renderStay(){
+  var h='<div class="dayhead"><div class="d">🏨 住宿</div><div class="s">兩間・共4晚|入住退房時間、地址、餐食溫泉與寄物策略</div></div>';
+  STAY.forEach(function(s){
+    h+='<div class="card"><h3>'+s.name+'</h3>';
+    h+='<span class="maptag">'+s.badge+'</span>';
+    h+='<p style="margin:7px 0"><span class="cost">'+s.inout+'</span></p>';
+    h+='<div class="lo">📍 '+s.zh+'<a class="gm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.q)+'" target="_blank" rel="noopener">↗地圖</a></div>';
+    h+='<div class="jpaddr">'+s.addr+'</div>';
+    h+='<p>🚉 '+s.access+'</p><p>♨️ '+s.bath+'</p><p>🍽️ '+s.meal+'</p>';
+    h+='<table>';
+    s.rows.forEach(function(r){ h+='<tr><td style="white-space:nowrap;color:var(--sub)">'+r[0]+'</td><td>'+r[1]+'</td></tr>'; });
+    h+='</table>';
+    h+='<div class="tip"><b>💡 </b>'+s.tips+'</div></div>';
+  });
+  return h;
+}
+
+/* ---------- 交通 ---------- */
+var TOOLS = [
+ ['📱 手機 Suica / IC 卡','iPhone:錢包 App 直接加 Suica(免實體卡、可用信用卡儲值);Android:Google 錢包加 Suica,或機場買 Welcome Suica / Kitaca。JR、札幌地鐵/市電、便利商店都能嗶。'],
+ ['📶 eSIM / 網路','出發前在 Klook/KKday 買北海道 eSIM(¥250–350/人),落地前裝好設定檔、下機後開「資料漫遊」。行程表本身離線可用,eSIM 只為查地圖與臨時查詢。'],
+ ['🗺️ Google Maps 離線地圖','出發前(有 Wi-Fi 時)先下載兩塊離線地圖:「札幌+小樽」「登別+洞爺湖」,沒訊號也能定位導航。'],
+ ['🚉 乘換查詢 App','「Yahoo!乗換案内」或「NAVITIME / Japan Transit Planner」查 JR/地鐵/巴士即時班次、月台與轉乘,比紙本準。'],
+ ['🎫 JR 特急購票','特急北斗全車指定席、務必劃位。可在「えきねっと」線上買「トクだ値」早鳥(省10–30%),或到車站「みどりの窓口/指定席券売機」一次買齊。']
+];
+var MOVEROUTE = [
+ ['8/26 新千歲空港→札幌','快速エアポート ¥1,150(B1月台,約37分,可加uシート指定席+¥840)'],
+ ['8/27 札幌⇄小樽','快速エアポート 來回 ¥1,500(約32–45分;08:40 出發較有座)'],
+ ['8/28 札幌→登別','特急北斗6号 08:43→09:54(指定席 ¥4,780)'],
+ ['8/28 登別駅⇄登別温泉','道南巴士・付現(約15分,來回約¥700–900)'],
+ ['8/28 登別→洞爺','特急北斗14号 14:41→15:21(指定席 約¥3,180)'],
+ ['8/28・8/29 洞爺駅⇄洞爺湖温泉','道南巴士・付現(整理券制,約20分)'],
+ ['8/29 洞爺→札幌','特急北斗11号 14:09→16:04(指定席 ¥6,360)'],
+ ['8/30 札幌→新千歲空港','快速エアポート ¥1,150(約37分,回程抓早班留報到時間)']
+];
+function renderMove(){
+  var h='<div class="dayhead"><div class="d">🚌 交通</div><div class="s">輔助工具・區間班次・注意事項與路線選擇</div></div>';
+  h+='<div class="sec">🧰 出發前先備好的輔助工具</div>';
+  TOOLS.forEach(function(t){ h+='<div class="card"><h3>'+t[0]+'</h3><p>'+t[1]+'</p></div>'; });
+  h+='<div class="sec">🚆 各段交通與班次</div><table><tr><th>區間</th><th>方式・班次</th></tr>';
+  MOVEROUTE.forEach(function(r){ h+='<tr><td style="white-space:nowrap">'+r[0]+'</td><td>'+r[1]+'</td></tr>'; });
+  h+='</table>';
+  h+='<div class="sec">⚠️ 注意事項與路線選擇</div>';
+  h+='<div class="card"><div class="alt"><b>道南巴士不能刷 Suica!</b>登別溫泉、洞爺湖溫泉的巴士都是<b>付現・整理券制</b>:後門上車抽整理券 → 下車看螢幕號碼付現(備 ¥100 硬幣與千元鈔,車上有兌幣機)。</div>';
+  h+='<div class="tip"><b>💡 小樽怎麼去</b>:JR快速¥750/約45分 vs 巴士¥680/約65分 → <b>推薦搭JR</b>(巴士路線多、易搭錯);雪季JR停駛才改巴士。可在「南小樽駅」下車走堺町通(步行5分),回程從小樽駅上車較有位。</div>';
+  h+='<div class="tip"><b>💡 指定席早鳥</b>:北斗6/14/11号可在「えきねっと」提前買トクだ値,省10–30%又保證有位;劃位後把票根/QR截圖存離線。</div>';
+  h+='<div class="tip"><b>💡 周遊券 vs 逐段</b>:北海道鐵路周遊券5日 ¥21,000/人 > 本行程逐段合計約 ¥20,520/人,故<b>逐段購票最省</b>,不需買周遊券。</div>';
+  h+='<div class="tip"><b>💡 行李與天候</b>:特急大行李放車廂端行李架並上鋼絲鎖;8/28 去洞爺輕裝、大件寄放札幌飯店。藻岩山/天狗山夜景遇雲霧改隔日,出發前一週用乘換案內 App 抽查三班北斗是否異動。</div>';
+  h+='</div>';
+  return h;
+}
+
 function show(id){
   Array.prototype.forEach.call(nav.children,function(b){b.classList.toggle('on',b.dataset.id===id)});
   var day=null;
   for(var i=0;i<DAYS.length;i++) if(DAYS[i].id===id) day=DAYS[i];
   if(day) main.innerHTML=renderDay(day);
+  else if(id==='food') main.innerHTML=renderFood();
+  else if(id==='stay') main.innerHTML=renderStay();
+  else if(id==='move') main.innerHTML=renderMove();
   else if(id==='maps') main.innerHTML=renderMaps();
   else if(id==='budget') main.innerHTML=renderBudget();
   else if(id==='info') main.innerHTML='<div class="dayhead"><div class="d">ℹ️ 實用資訊</div></div>'+INFO_HTML+
