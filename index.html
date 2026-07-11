@@ -63,6 +63,15 @@ main{max-width:640px; margin:0 auto; padding:12px}
 .foodlink{font-size:.6rem; line-height:1.2; text-align:center; padding:2px 6px; border-radius:8px;
   color:var(--acc2); border:1px solid var(--acc2); background:transparent;
   text-decoration:none; cursor:pointer; font-weight:700; white-space:nowrap}
+.seg{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:9px 12px;
+  margin-bottom:8px; box-shadow:var(--shadow)}
+.seg-h{display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+.seg-d{font-size:.7rem; color:#fff; background:var(--acc); border-radius:6px; padding:1px 7px;
+  font-weight:700; white-space:nowrap}
+.seg-h b{font-size:.9rem; color:var(--ink)}
+.seg-h .cost{margin:0 0 0 auto}
+.seg-b{font-size:.8rem; color:var(--ink); margin-top:5px}
+.seg-n{color:var(--sub)}
 .ck{flex:0 0 auto; width:24px; height:24px; border:2px solid var(--line); border-radius:50%;
   margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:.8rem; color:transparent}
 .ev.done .ck{background:var(--acc); border-color:var(--acc); color:#fff}
@@ -873,14 +882,14 @@ var TOOLS = [
  ['🎫 JR 特急購票','特急北斗全車指定席、務必劃位。可在「えきねっと」線上買「トクだ値」早鳥(省10–30%),或到車站「みどりの窓口/指定席券売機」一次買齊。']
 ];
 var MOVEROUTE = [
- ['8/26 新千歲空港→札幌','快速エアポート ¥1,150(B1月台,約37分,可加uシート指定席+¥840)'],
- ['8/27 札幌⇄小樽','快速エアポート 來回 ¥1,500(約32–45分;08:40 出發較有座)'],
- ['8/28 札幌→登別','特急北斗6号 08:43→09:54(指定席 ¥4,780)'],
- ['8/28 登別駅⇄登別温泉','道南巴士・付現(約15分,來回約¥700–900)'],
- ['8/28 登別→洞爺','特急北斗14号 14:41→15:21(指定席 約¥3,180)'],
- ['8/28・8/29 洞爺駅⇄洞爺湖温泉','道南巴士・付現(整理券制,約20分)'],
- ['8/29 洞爺→札幌','特急北斗11号 14:09→16:04(指定席 ¥6,360)'],
- ['8/30 札幌→新千歲空港','快速エアポート ¥1,150(約37分,回程抓早班留報到時間)']
+ {date:'8/26', route:'新千歲空港 → 札幌', mode:'🚄 快速エアポート', time:'約37分・B1月台', fare:'¥1,150', note:'可加 uシート指定席 +¥840'},
+ {date:'8/27', route:'札幌 ⇄ 小樽', mode:'🚄 快速エアポート', time:'約32–45分・往返', fare:'¥1,500', note:'08:40 出發較有座'},
+ {date:'8/28', route:'札幌 → 登別', mode:'🚄 特急北斗6号', time:'08:43 → 09:54', fare:'¥4,780', note:'指定席'},
+ {date:'8/28', route:'登別駅 ⇄ 登別温泉', mode:'🚌 道南巴士', time:'約15分・往返', fare:'¥700–900', note:'付現・整理券制'},
+ {date:'8/28', route:'登別 → 洞爺', mode:'🚄 特急北斗14号', time:'14:41 → 15:21', fare:'約¥3,180', note:'指定席'},
+ {date:'8/28–29', route:'洞爺駅 ⇄ 洞爺湖温泉', mode:'🚌 道南巴士', time:'約20分', fare:'', note:'付現・整理券制'},
+ {date:'8/29', route:'洞爺 → 札幌', mode:'🚄 特急北斗11号', time:'14:09 → 16:04', fare:'¥6,360', note:'指定席'},
+ {date:'8/30', route:'札幌 → 新千歲空港', mode:'🚄 快速エアポート', time:'約37分', fare:'¥1,150', note:'回程抓早班、留報到時間'}
 ];
 var FLIGHT = {
   fare:'2 人合計 TWD 65,940(每人 32,970)',
@@ -901,9 +910,13 @@ function renderMove(){
   h+='<div class="card"><h3>💳 票價</h3><p style="margin:4px 0"><span class="cost">'+FLIGHT.fare+'</span></p><p class="note">'+FLIGHT.breakdown+'</p></div>';
   h+='<div class="sec">🧰 出發前先備好的輔助工具</div>';
   TOOLS.forEach(function(t){ h+='<div class="card"><h3>'+t[0]+'</h3><p>'+t[1]+'</p></div>'; });
-  h+='<div class="sec">🚆 各段交通與班次</div><table><tr><th>區間</th><th>方式・班次</th></tr>';
-  MOVEROUTE.forEach(function(r){ h+='<tr><td style="white-space:nowrap">'+r[0]+'</td><td>'+r[1]+'</td></tr>'; });
-  h+='</table>';
+  h+='<div class="sec">🚆 各段交通與班次</div>';
+  MOVEROUTE.forEach(function(r){
+    h+='<div class="seg"><div class="seg-h"><span class="seg-d">'+r.date+'</span><b>'+r.route+'</b>'+
+       (r.fare?'<span class="cost">'+r.fare+'</span>':'')+'</div>'+
+       '<div class="seg-b">'+r.mode+' ・ '+r.time+(r.note?' <span class="seg-n">('+r.note+')</span>':'')+'</div></div>';
+  });
+  h+='<p class="note">票價為每人;🚄特急=全車指定席需劃位,🚌巴士=付現・整理券制。</p>';
   h+='<div class="sec">⚠️ 注意事項與路線選擇</div>';
   h+='<div class="card"><div class="alt"><b>道南巴士不能刷 Suica!</b>登別溫泉、洞爺湖溫泉的巴士都是<b>付現・整理券制</b>:後門上車抽整理券 → 下車看螢幕號碼付現(備 ¥100 硬幣與千元鈔,車上有兌幣機)。</div>';
   h+='<div class="tip"><b>💡 小樽怎麼去</b>:JR快速¥750/約45分 vs 巴士¥680/約65分 → <b>推薦搭JR</b>(巴士路線多、易搭錯);雪季JR停駛才改巴士。可在「南小樽駅」下車走堺町通(步行5分),回程從小樽駅上車較有位。</div>';
